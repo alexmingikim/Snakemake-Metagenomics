@@ -1,1 +1,1 @@
-Location for fastq files 
+# Location for fastq files 
