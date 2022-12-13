@@ -21,4 +21,3 @@ printshellcmds: True
 rerun-incomplete: True 
 use-conda: True
 cluster-cancel: scancel
-cluster-status: ./status.py
