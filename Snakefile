@@ -2,8 +2,30 @@
 # Maintainer: Alex Kim
 # Email: alex.kim@agresearch.co.nz
 
-""""
+
 configfile: 
+
+import os
+
+onstart:
+    print(f"Working directory: {os.getcwd()}")
+    print("TOOLS: ")
+    os.system('echo "  bash: $(which bash)"')
+    os.system('echo "  PYTHON: $(which python)"')
+    os.system('echo "  CONDA: $(which conda)"')
+    os.system('echo "  SNAKEMAKE: $(which snakemake)"')
+    os.system('echo "  PYTHON VERSION: $(python --version)"')
+    os.system('echo "  CONDA VERSION: $(conda --version)"')
+    print(f"Env TMPDIR={os.environ.get('TMPDIR', '<n/a>')}")
+
+# define samples from data directory using wildcards
+SAMPLES, = glob_wildcards('fastq/{samples}.fastq.gz')
+
+# sanity check
+print("Found: ")
+for WLDCRD in SAMPLES:
+    print(WLDCRD)
+print("")
 
 rule all:
     input: 
@@ -28,4 +50,4 @@ rule braken:
 
 #  merge kraken2 reports using utility scripts 
 
-""""
+
