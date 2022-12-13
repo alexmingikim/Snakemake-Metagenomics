@@ -45,17 +45,30 @@ rule fastqc:
         'envs/fastqc.yaml'
     threads: 1 
     message: 
-        'Running QC on reads: {wildcards.samples}\n'
+        'Running quality checks on reads: {wildcards.samples}\n'
     shell:
         '-fastqc '
         '-o results/fastqc/ '
-        '-q '
+        '-q ' # suppress progress messages; only report errors 
         '-t {threads} '
         '{input.fastq}'
 
 
 rule multiqc:
     # reporting tool 
+    input: 
+        fastqc = 'results/fastqc/{samples}_fastqc.zip'
+    output: 
+        multiqc = 'results/ReadsMultiQCReport.html'
+    conda: 
+        "envs/multiqc.yaml"
+    shell:
+        'multqc '
+        '-n results/ReadsMultiQCReport '
+        '-s ' # to not clean sample names 
+        '-f ' # overwrite existing reports 
+        '--interative ' # interactive plots 
+        '{input.fastqc}'
 
 rule kneaddata: 
     # quality control 
