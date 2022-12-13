@@ -31,10 +31,28 @@ rule all:
     input: 
         # kraken2 report 
         # multiqc report 
+        'results/ReadsMultiQCReport.html'
         
 
 rule fastqc:
     # quality control 
+    input:
+        fastq = expand('fastq/{samples}.fastq.gz', samples = SAMPLES)
+    output: 
+        html = 'results/fastqc/{samples}_fastqc.html',
+        zip = 'results/fastqc/{samples}_fastqc.zip'
+    conda: 
+        'envs/fastqc.yaml'
+    threads: 1 
+    message: 
+        'Running QC on reads: {wildcards.samples}\n'
+    shell:
+        '-fastqc '
+        '-o results/fastqc/ '
+        '-q '
+        '-t {threads} '
+        '{input.fastq}'
+
 
 rule multiqc:
     # reporting tool 
