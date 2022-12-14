@@ -7,5 +7,14 @@ echo "Launching snakemake workflow..."
 sleep 3
 echo "Beginning executing on: $(date)"
 
+conda activate snakemake 
 
 snakemake --profile slurm/
+
+snakemake --report snakemakeReport.html
+
+snakemake --rulegraph | dot -T svg > rulegraph.svg
+
+conda deactivate 
+
+echo "snakemake run completed: $(data)"
