@@ -17,4 +17,4 @@ snakemake --rulegraph | dot -T svg > rulegraph.svg
 
 conda deactivate 
 
-echo "snakemake run completed: $(date)"
+echo "Snakemake run completed: $(date)"
