@@ -111,6 +111,24 @@ rule kneaddata:
         'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
 
 
+rule fastqcKDRs: 
+    input: 
+        KDRs = rules.kneaddata.output.cleanReads
+    output:
+        'results/fastqcKDR/{samples}_kneaddata_fastqc.zip'
+    conda: 
+        'fastqc'
+    threads: 1
+    message: 
+        'Running quality checks on reads: {wildcards.samples}\n'
+    shell: 
+        'fastqc '
+        '-o results/fastqcKDR/ '
+        '-q '
+        '-t {threads} '
+        '{input.fastqc}'
+
+        
 rule kraken2:
     # taxonomic profiling 
 
