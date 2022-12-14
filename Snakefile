@@ -30,6 +30,8 @@ print("")
 rule all:
     input: 
         # kraken2 report 
+        # expand('results/kraken2/{samples}.report.k2', samples = SAMPLES), 
+
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
         'results/ReadsMultiQCReportKneadData.html'
@@ -144,8 +146,28 @@ rule multiQCKDRs:
         '--interactive '
         '{input.fastqc}'
 
+
+"""
 rule kraken2:
     # taxonomic profiling 
+    input:
+        KDRs = rules.kneaddata.output.cleanReads
+    output: 
+        k2Output = 'results/kraken2/{samples}.out.k2',
+        k2Report = 'results/kraken2/{samples}.report.k2'
+    log:
+        'logs/{samples}.kraken2.log'
+    conda:
+        'envs/kraken2.yaml'
+    threads: 12
+    resources: mem_mb=180000
+    shell:
+        'kraken2 '
+        '--db ref/kraken2 '
+        '--report {output.k2Report} '
+        '--report-minimizer-data '
+        '{input.KDRs} > {output.k2Output)'
+"""
 
 rule braken:
     # compute abundance 
