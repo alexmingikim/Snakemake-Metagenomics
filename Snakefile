@@ -37,7 +37,7 @@ rule all:
 rule fastqc:
     # quality control 
     input:
-        fastq = expand('fastq/{samples}.fastq.gz', samples = SAMPLES)
+        fastq = 'fastq/{samples}.fastq.gz'
     output: 
         html = 'results/fastqc/{samples}_fastqc.html',
         zip = 'results/fastqc/{samples}_fastqc.zip'
@@ -57,7 +57,7 @@ rule fastqc:
 rule multiqc:
     # reporting tool 
     input: 
-        fastqc = 'results/fastqc/{samples}_fastqc.zip'
+        fastqc = expand('results/fastqc/{samples}_fastqc.zip', samples = SAMPLES)
     output: 
         multiqc = 'results/ReadsMultiQCReport.html'
     conda: 
