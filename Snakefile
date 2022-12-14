@@ -47,7 +47,7 @@ rule fastqc:
     message: 
         'Running quality checks on reads: {wildcards.samples}\n'
     shell:
-        '-fastqc '
+        'fastqc '
         '-o results/fastqc/ '
         '-q ' # suppress progress messages; only report errors 
         '-t {threads} '
