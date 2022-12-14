@@ -1,7 +1,7 @@
 jobs: 20
 cluster:
     sbatch
-        --parsable
+        --parsable # output only job id number and cluster name 
         --partition {resources.partition}
         --time {resources.time_min}
         --mem {resources.mem_mb}
