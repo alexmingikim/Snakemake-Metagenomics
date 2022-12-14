@@ -6,3 +6,6 @@ clear
 echo "Launching snakemake workflow..."
 sleep 3
 echo "Beginning executing on: $(date)"
+
+
+snakemake --profile slurm/
