@@ -67,7 +67,7 @@ rule multiqc:
         '-n results/ReadsMultiQCReport '
         '-s ' # to not clean sample names 
         '-f ' # overwrite existing reports 
-        '--interative ' # interactive plots 
+        '--interactive ' # interactive plots 
         '{input.fastqc}'
 
 rule kneaddata: 
