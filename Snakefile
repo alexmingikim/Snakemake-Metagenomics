@@ -31,8 +31,8 @@ rule all:
     input: 
         # kraken2 report 
         # multiqc reports (raw data and knead data)
-        'results/ReadsMultiQCReportRAWDATA.html',
-        'results/ReadsMultiQCReportKNEADDATA.html'
+        'results/ReadsMultiQCReportRawData.html',
+        'results/ReadsMultiQCReportKneadData.html'
         
 
 rule fastqc:
@@ -60,12 +60,12 @@ rule multiqc:
     input: 
         fastqc = expand('results/fastqc/{samples}_fastqc.zip', samples = SAMPLES) # input all outputs from fastqc as one input 
     output: 
-        multiqc = 'results/ReadsMultiQCReportRAWDATA.html'
+        multiqc = 'results/ReadsMultiQCReportRawData.html'
     conda: 
         "envs/multiqc.yaml"
     shell:
         'multiqc '
-        '-n results/ReadsMultiQCReport '
+        '-n results/ReadsMultiQCReportRawData '
         '-s ' # to not clean sample names 
         '-f ' # overwrite existing reports 
         '--interactive ' # interactive plots 
@@ -91,7 +91,7 @@ rule kneaddata:
         # summary?
         readStats = 'results/kneaddata/{samples}.read.stats.txt'
     conda: 
-        'biobakery'
+        'envs/biobakery.yaml'
     log:
         'logs/{samples}.kneaddata.log'
     threads: 4
@@ -117,7 +117,7 @@ rule fastqcKDRs:
     output:
         'results/fastqcKDR/{samples}_kneaddata_fastqc.zip'
     conda: 
-        'fastqc'
+        'envs/fastqc.yaml'
     threads: 1
     message: 
         'Running quality checks on reads: {wildcards.samples}\n'
@@ -128,7 +128,22 @@ rule fastqcKDRs:
         '-t {threads} '
         '{input.fastqc}'
 
-        
+
+rule multiQCKDRs: 
+    input: 
+        fastqc = expand('results/fastqcKDR/{samples}_kneaddata_fastqc.zip', samples = SAMPLES)
+    output: 
+        'results/ReadsMultiQCReportKneadData.html'
+    conda: 
+        'envs/multiqc.yaml'
+    shell:
+        'multiqc '
+        '-n results/ReadsMultiQCReportKneadData '
+        '-s '
+        '-f '
+        '--interactive '
+        '{input.fastqc}'
+
 rule kraken2:
     # taxonomic profiling 
 
