@@ -63,7 +63,7 @@ rule multiqc:
     conda: 
         "envs/multiqc.yaml"
     shell:
-        'multqc '
+        'multiqc '
         '-n results/ReadsMultiQCReport '
         '-s ' # to not clean sample names 
         '-f ' # overwrite existing reports 
