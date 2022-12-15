@@ -84,7 +84,7 @@ rule kneaddata:
         # trim repetitive sequences 
         trfReads = temp('results/kneaddata/{samples}_kneaddata.repeats.removed.fastq'),
         # trim host DNA 
-        ovineReads = temp('results/kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie_contam.fastq'),
+        ovineReads = temp('results/kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
         # trim 16S rRNA
         silvaReads = temp('results/kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
         # filtered reads 
