@@ -94,7 +94,7 @@ rule kneaddata:
     conda: 
         'envs/biobakery.yaml'
     log:
-        'logs/{samples}.kneaddata.log'
+        'logs/kneaddata/{samples}.kneaddata.log'
     threads: 4
     message:
         'kneaddata: {wildcards.samples}\n'
