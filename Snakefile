@@ -114,7 +114,7 @@ rule kneaddata:
 
 rule fastqcKDRs: 
     input: 
-        fastq = 'results/kneaddata/{samples}_kneaddata.fastq'
+        fastq = rules.kneaddata.output.cleanReads
     output:
         'results/fastqcKDR/{samples}_kneaddata_fastqc.zip'
     conda: 
@@ -127,7 +127,7 @@ rule fastqcKDRs:
         '-o results/fastqcKDR/ '
         '-q '
         '-t {threads} '
-        '{input.fastqc}'
+        '{input.fastq}'
 
 
 rule multiQCKDRs: 
