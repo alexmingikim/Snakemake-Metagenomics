@@ -88,9 +88,9 @@ rule kneaddata:
         # trim 16S rRNA
         silvaReads = temp('results/kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
         # filtered reads 
-        cleanReads = 'results/kneaddata/{samples}_kneaddata.fastq',
+        cleanReads = 'results/kneaddata/{samples}_kneaddata.fastq'
         # summary?
-        readStats = 'results/kneaddata/{samples}.read.stats.txt'
+        # readStats = 'results/kneaddata/{samples}.read.stats.txt'
     conda: 
         'envs/biobakery.yaml'
     log:
@@ -108,8 +108,8 @@ rule kneaddata:
         '--sequencer-source TruSeq3 ' # to identify adapter sequences? 
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
-        '-o results/kneaddata && '
-        'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
+        '-o results/kneaddata'
+        # 'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
 
 
 rule fastqcKDRs: 
