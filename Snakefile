@@ -101,7 +101,7 @@ rule kneaddata:
     shell:
         'kneaddata '
         '--input {input.reads} '
-        '-t {threads}'
+        '-t {threads} '
         '--log-level INFO '
         '--log {log} '
         '--trimmomatic /home/kima/conda-envs/biobakery/share/trimmomatic-0.39-2 ' 
@@ -114,7 +114,7 @@ rule kneaddata:
 
 rule fastqcKDRs: 
     input: 
-        fastq = rules.kneaddata.output.cleanReads
+        fastqc = rules.kneaddata.output.cleanReads
     output:
         'results/fastqcKDR/{samples}_kneaddata_fastqc.zip'
     conda: 
@@ -127,7 +127,7 @@ rule fastqcKDRs:
         '-o results/fastqcKDR/ '
         '-q '
         '-t {threads} '
-        '{input.fastq}'
+        '{input.fastqc}'
 
 
 rule multiQCKDRs: 
