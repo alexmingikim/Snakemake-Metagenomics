@@ -114,7 +114,7 @@ rule kneaddata:
 
 rule fastqcKDRs: 
     input: 
-        KDRs = rules.kneaddata.output.cleanReads
+        fastq = 'results/kneaddata/{samples}_kneaddata.fastq'
     output:
         'results/fastqcKDR/{samples}_kneaddata_fastqc.zip'
     conda: 
