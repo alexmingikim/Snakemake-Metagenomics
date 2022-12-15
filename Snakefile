@@ -19,7 +19,7 @@ onstart:
     print(f"Env TMPDIR={os.environ.get('TMPDIR', '<n/a>')}")
 
 # define samples from data directory using wildcards
-SAMPLES, = glob_wildcards('fastq/{samples}.fastq.gz')
+SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz')
 
 # sanity check
 print("Found: ")
@@ -39,7 +39,8 @@ rule all:
 rule fastqc:
     # quality control 
     input:
-        fastq = 'fastq/{samples}.fastq.gz' # process each sample individually 
+        fastq1 = 'fastq/{samples}_R1_001.fastq.gz' # process each sample individually 
+        fastq2 =
     output: 
         html = 'results/fastqc/{samples}_fastqc.html',
         zip = 'results/fastqc/{samples}_fastqc.zip'
