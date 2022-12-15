@@ -1,4 +1,3 @@
-jobs: 75
 cluster:
   mkdir -p logs/{rule} &&
   sbatch
@@ -12,7 +11,7 @@ cluster:
     --verbose
 default-resources:
   - account=kima
-  - partition=inv-iranui-fast,inv-iranui
+  - partition=inv-iranui-fast,inv-iranui,inv-blade-g8-fast,inv-blade-g8,inv-bigmem,inv-bigmem-fast
   - qos=normal
   - time="02:00:00"
   - mem_gb=8
@@ -29,4 +28,5 @@ scheduler: greedy
 use-conda: True
 use-singularity: True
 reason: True
-cluster-cancel: scancel
+cluster-cancel: scancel -u kima
+jobs: 12
