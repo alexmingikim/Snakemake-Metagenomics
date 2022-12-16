@@ -38,19 +38,22 @@ rule all:
         'results/ReadsMultiQCReportKneadData.html'
         
 
-rule fastqc1:
+rule fastqc:
     # quality control 
     input:
         # QC for files individually
-        fastq = 'fastq/{samples}_R1_001.fastq.gz'
+        fastq1 = 'fastq/{samples}_R1_001.fastq.gz',
+        fastq2 = 'fastq/{samples}_R2_001.fastq.gz'
     output: 
-        html = 'results/fastqc/{samples}_R1_001_fastqc.html',
-        zip = 'results/fastqc/{samples}_R1_001_fastqc.zip'
+        html1 = 'results/fastqc/{samples}_R1_001_fastqc.html',
+        zip1 = 'results/fastqc/{samples}_R1_001_fastqc.zip',
+        html2 = 'results/fastqc/{samples}_R2_001_fastqc.html',
+        zip2 = 'results/fastqc/{samples}_R2_001_fastqc.zip'
     conda: 
         'envs/fastqc.yaml'
     threads: 1 
     message: 
-        'Running quality checks on reads: {wildcards.samples}_R1_001\n'
+        'Running quality checks on reads: {wildcards.samples}\n'
     shell:
         'fastqc '
         '-o results/fastqc/ '
@@ -58,26 +61,6 @@ rule fastqc1:
         '-t {threads} '
         '{input.fastq}'
 
-
-rule fastqc2:
-    # quality control 
-    input:
-        # QC for files individually
-        fastq = 'fastq/{samples}_R2_001.fastq.gz'
-    output: 
-        html = 'results/fastqc/{samples}_R2_001_fastqc.html',
-        zip = 'results/fastqc/{samples}_R2_001_fastqc.zip'
-    conda: 
-        'envs/fastqc.yaml'
-    threads: 1 
-    message: 
-        'Running quality checks on reads: {wildcards.samples}_R2_001\n'
-    shell:
-        'fastqc '
-        '-o results/fastqc/ '
-        '-q ' # suppress progress messages; only report errors 
-        '-t {threads} '
-        '{input.fastq}'
 
 rule multiqc:
     # reporting tool 
