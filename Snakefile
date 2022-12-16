@@ -82,7 +82,7 @@ rule fastqc2:
 rule multiqc:
     # reporting tool 
     input: 
-        fastqc = expand('results/fastqc/{samples}{reads}_fastqc.zip', samples = SAMPLES)
+        fastqc = expand('results/fastqc/{samples}{reads}_fastqc.zip', samples = SAMPLES, reads = reads)
     output: 
         multiqc = 'results/ReadsMultiQCReportRawData.html'
     conda: 
