@@ -19,18 +19,19 @@ onstart:
     print(f"Env TMPDIR={os.environ.get('TMPDIR', '<n/a>')}")
 
 # define samples from data directory using wildcards
-SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz')
+SAMPLES_long, = glob_wildcards('fastq/{samples_long}.fastq.gz') # full sample name
+SAMPLES_short, = glob_wildcards('fastq/{samples_short}_R1_001.fastq.gz') # shortened sample name 
 
 # sanity check
 print("Found: ")
-for WLDCRD in SAMPLES:
+for WLDCRD in SAMPLES_long:
     print(WLDCRD)
 print("")
 
 rule all:
     input: 
         # kraken2 report 
-        # expand('results/kraken2/{samples}.report.k2', samples = SAMPLES), 
+        # expand('results/kraken2/{samples_long}.report.k2', samples_long = SAMPLES_long), 
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
         'results/ReadsMultiQCReportKneadData.html'
@@ -39,28 +40,28 @@ rule all:
 rule fastqc:
     # quality control 
     input:
-        fastq1 = 'fastq/{samples}_R1_001.fastq.gz' # process each sample individually 
-        fastq2 =
+        # QC for files individually
+        fastq = 'fastq/{samples_long}.fastq.gz'
     output: 
-        html = 'results/fastqc/{samples}_fastqc.html',
-        zip = 'results/fastqc/{samples}_fastqc.zip'
+        html = 'results/fastqc/{samples_long}_fastqc.html',
+        zip = 'results/fastqc/{samples_long}_fastqc.zip'
     conda: 
         'envs/fastqc.yaml'
     threads: 1 
     message: 
-        'Running quality checks on reads: {wildcards.samples}\n'
+        'Running quality checks on reads: {wildcards.samples_long}\n'
     shell:
         'fastqc '
         '-o results/fastqc/ '
         '-q ' # suppress progress messages; only report errors 
         '-t {threads} '
-        '{input.fastq}'
+        '{input.fastq}''
 
 
 rule multiqc:
     # reporting tool 
     input: 
-        fastqc = expand('results/fastqc/{samples}_fastqc.zip', samples = SAMPLES) # input all outputs from fastqc as one input 
+        fastqc = expand('results/fastqc/{samples_long}_fastqc.zip', samples_long = SAMPLES_long) # input all outputs from fastqc as one input 
     output: 
         multiqc = 'results/ReadsMultiQCReportRawData.html'
     conda: 
@@ -78,30 +79,32 @@ rule kneaddata:
     # quality control - separate bacterial reads from contaminant reads (host, bacterial 16S sequences) 
     input: 
         ### two inputs for paired end reads? ###
-        reads = 'fastq/{samples}.fastq.gz'
+        fastq1 = 'fastq/{samples_short}_R1_001.fastq.gz', 
+        fastq2 = 'fastq/{samples_short}_R2_001.fastq.gz'
     output: 
         # trim adapters ...
-        trimReads = temp('results/kneaddata/{samples}_kneaddata.trimmed.fastq'),
+        trimReads = temp('results/kneaddata/{samples_short}_kneaddata.trimmed.fastq'),
         # trim repetitive sequences 
-        trfReads = temp('results/kneaddata/{samples}_kneaddata.repeats.removed.fastq'),
+        trfReads = temp('results/kneaddata/{samples_short}_kneaddata.repeats.removed.fastq'),
         # trim host DNA 
-        ovineReads = temp('results/kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
+        ovineReads = temp('results/kneaddata/{samples_short}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
         # trim 16S rRNA
-        silvaReads = temp('results/kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
+        silvaReads = temp('results/kneaddata/{samples_short}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
         # filtered reads 
-        cleanReads = 'results/kneaddata/{samples}_kneaddata.fastq'
+        cleanReads = 'results/kneaddata/{samples_short}_kneaddata.fastq'
         # summary?
-        # readStats = 'results/kneaddata/{samples}.read.stats.txt'
+        # readStats = 'results/kneaddata/{samples_short}.read.stats.txt'
     conda: 
         'envs/biobakery.yaml'
     log:
-        'logs/kneaddata/{samples}.kneaddata.log'
+        'logs/kneaddata/{samples_short}.kneaddata.log'
     threads: 4
     message:
-        'kneaddata: {wildcards.samples}\n'
+        'kneaddata: {wildcards.samples_short}\n'
     shell:
         'kneaddata '
-        '--input {input.reads} '
+        '--input1 {input.fastq1} '
+        '--input2 {input.fastq2} '
         '-t {threads} '
         '--log-level INFO '
         '--log {log} '
@@ -110,19 +113,19 @@ rule kneaddata:
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
         '-o results/kneaddata'
-        # 'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
+        # 'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples_long}*.fastq > {output.readStats}'
 
 
 rule fastqcKDRs: 
     input: 
         fastqc = rules.kneaddata.output.cleanReads
     output:
-        'results/fastqcKDR/{samples}_kneaddata_fastqc.zip'
+        'results/fastqcKDR/{samples_short}_kneaddata_fastqc.zip'
     conda: 
         'envs/fastqc.yaml'
     threads: 1
     message: 
-        'Running quality checks on reads: {wildcards.samples}\n'
+        'Running quality checks on reads: {wildcards.samples_short}\n'
     shell: 
         'fastqc '
         '-o results/fastqcKDR/ '
@@ -133,7 +136,7 @@ rule fastqcKDRs:
 
 rule multiQCKDRs: 
     input: 
-        fastqc = expand('results/fastqcKDR/{samples}_kneaddata_fastqc.zip', samples = SAMPLES)
+        fastqc = expand('results/fastqcKDR/{samples_short}_kneaddata_fastqc.zip', samples_short = SAMPLES_short)
     output: 
         'results/ReadsMultiQCReportKneadData.html'
     conda: 
@@ -153,10 +156,10 @@ rule kraken2:
     input:
         KDRs = rules.kneaddata.output.cleanReads
     output: 
-        k2Output = 'results/kraken2/{samples}.out.k2',
-        k2Report = 'results/kraken2/{samples}.report.k2'
+        k2Output = 'results/kraken2/{samples_long}.out.k2',
+        k2Report = 'results/kraken2/{samples_long}.report.k2'
     log:
-        'logs/{samples}.kraken2.log'
+        'logs/{samples_long}.kraken2.log'
     conda:
         'envs/kraken2.yaml'
     threads: 12
