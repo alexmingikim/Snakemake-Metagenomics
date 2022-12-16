@@ -55,7 +55,7 @@ rule fastqc:
         '-o results/fastqc/ '
         '-q ' # suppress progress messages; only report errors 
         '-t {threads} '
-        '{input.fastq}''
+        '{input.fastq}'
 
 
 rule multiqc:
