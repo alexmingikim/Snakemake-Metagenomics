@@ -21,7 +21,7 @@ onstart:
 # define samples from data directory using wildcards
 SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz') 
 
-READS = ['_R1_001', '_R2_001']
+READS, = ['_R1_001', '_R2_001']
 
 # sanity check
 print("Found: ")
