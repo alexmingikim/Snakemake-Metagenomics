@@ -21,7 +21,7 @@ onstart:
 # define samples from data directory using wildcards
 SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz') 
 
-reads = ['_R1_001', '_R2_001']
+READS = ['_R1_001', '_R2_001']
 
 # sanity check
 print("Found: ")
@@ -82,7 +82,7 @@ rule fastqc2:
 rule multiqc:
     # reporting tool 
     input: 
-        fastqc = expand('results/fastqc/{samples}{reads}_fastqc.zip', samples = SAMPLES, reads = reads)
+        fastqc = expand('results/fastqc/{samples}{reads}_fastqc.zip', samples = SAMPLES, reads = READS)
     output: 
         multiqc = 'results/ReadsMultiQCReportRawData.html'
     conda: 
