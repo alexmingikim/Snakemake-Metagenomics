@@ -106,10 +106,10 @@ rule kneaddata:
     output: 
         # reads from R1, R2 identified as NOT belonging to any reference databases 
         clnReadsR1 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_1.fastq',
-        clnReadsR2 = 'results/kneaddata/{samples}_R2_001_kneaddata_paired_2.fastq',
+        clnReadsR2 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_2.fastq',
         # cases when one of the reads do not pass quality filtering  
         unmatchedR1 = temp('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_1.fastq'),
-        unmatchedR2 = temp('results/kneaddata/{samples}_R2_001_kneaddata_unmatched_2.fastq')
+        unmatchedR2 = temp('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_2.fastq')
     conda: 
         'envs/biobakery.yaml'
     log:
