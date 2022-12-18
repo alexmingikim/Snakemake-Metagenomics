@@ -86,7 +86,7 @@ rule multiqc:
     output: 
         multiqc = 'results/ReadsMultiQCReportRawData.html'
     conda: 
-        "envs/multiqc.yaml"
+        'envs/multiqc.yaml'
     shell:
         'multiqc '
         '-n results/ReadsMultiQCReportRawData '
@@ -119,12 +119,12 @@ rule kneaddata:
         # readStats = 'results/kneaddata/{samples_short}.read.stats.txt'
         """
         # reads from R1 identified as NOT belonging to any reference databases 
-        clnReadsR1 = 'results/kneaddata/{sample}_R1_001_kneaddata_paired_1.fastq'
+        clnReadsR1 = 'results/kneaddata/{sample}_R1_001_kneaddata_paired_1.fastq',
         # reads from R2 identified as NOT belonging to any reference databases 
-        clnReadsR2 = 'results/kneaddata/{sample}_R2_001_kneaddata_paired_2.fastq'
+        clnReadsR2 = 'results/kneaddata/{sample}_R2_001_kneaddata_paired_2.fastq',
 
         # cases when one of the reads do not pass quality filtering  
-        unmatchedR1 = temp('results/kneaddata/{sample}_R1_001_kneaddata_unmatched_1.fastq')
+        unmatchedR1 = temp('results/kneaddata/{sample}_R1_001_kneaddata_unmatched_1.fastq'),
         unmatchedR2 = temp('results/kneaddata/{sample}_R2_001_kneaddata_unmatched_2.fastq')
         
     conda: 
