@@ -79,6 +79,7 @@ rule fastqcR2:
         '-t {threads} '
         '{input.fastq}'
 
+
 rule multiqc:
     # reporting tool 
     input: 
@@ -103,30 +104,12 @@ rule kneaddata:
         fastq1 = 'fastq/{samples}_R1_001.fastq.gz', 
         fastq2 = 'fastq/{samples}_R2_001.fastq.gz'
     output: 
-        """
-        # trim adapters ...
-        trimReads = temp('results/kneaddata/{samples}_kneaddata.trimmed.fastq'),
-        # trim repetitive sequences 
-        trfReads = temp('results/kneaddata/{samples}_kneaddata.repeats.removed.fastq'),
-        # trim host DNA 
-        ovineReads = temp('results/kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie2_contam.fastq'),
-        # trim 16S rRNA
-        silvaReads = temp('results/kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
-        # filtered reads 
-        clnReads1 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_1.fastq'
-        clnReads2 = 'results/kneaddata/{samples}_R1_
-        # summary?
-        # readStats = 'results/kneaddata/{samples_short}.read.stats.txt'
-        """
-        # reads from R1 identified as NOT belonging to any reference databases 
+        # reads from R1, R2 identified as NOT belonging to any reference databases 
         clnReadsR1 = 'results/kneaddata/{sample}_R1_001_kneaddata_paired_1.fastq',
-        # reads from R2 identified as NOT belonging to any reference databases 
         clnReadsR2 = 'results/kneaddata/{sample}_R2_001_kneaddata_paired_2.fastq',
-
         # cases when one of the reads do not pass quality filtering  
         unmatchedR1 = temp('results/kneaddata/{sample}_R1_001_kneaddata_unmatched_1.fastq'),
         unmatchedR2 = temp('results/kneaddata/{sample}_R2_001_kneaddata_unmatched_2.fastq')
-        
     conda: 
         'envs/biobakery.yaml'
     log:
