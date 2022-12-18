@@ -105,11 +105,11 @@ rule kneaddata:
         fastq2 = 'fastq/{samples}_R2_001.fastq.gz'
     output: 
         # reads from R1, R2 identified as NOT belonging to any reference databases 
-        clnReadsR1 = 'results/kneaddata/{sample}_R1_001_kneaddata_paired_1.fastq',
-        clnReadsR2 = 'results/kneaddata/{sample}_R2_001_kneaddata_paired_2.fastq',
+        clnReadsR1 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_1.fastq',
+        clnReadsR2 = 'results/kneaddata/{samples}_R2_001_kneaddata_paired_2.fastq',
         # cases when one of the reads do not pass quality filtering  
-        unmatchedR1 = temp('results/kneaddata/{sample}_R1_001_kneaddata_unmatched_1.fastq'),
-        unmatchedR2 = temp('results/kneaddata/{sample}_R2_001_kneaddata_unmatched_2.fastq')
+        unmatchedR1 = temp('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_1.fastq'),
+        unmatchedR2 = temp('results/kneaddata/{samples}_R2_001_kneaddata_unmatched_2.fastq')
     conda: 
         'envs/biobakery.yaml'
     log:
@@ -190,10 +190,10 @@ rule kraken2:
     input:
         KDRs = rules.kneaddata.output.cleanReads
     output: 
-        k2Output = 'results/kraken2/{samples_long}.out.k2',
-        k2Report = 'results/kraken2/{samples_long}.report.k2'
+        k2Output = 'results/kraken2/{samples}.out.k2',
+        k2Report = 'results/kraken2/{samples}.report.k2'
     log:
-        'logs/{samples_long}.kraken2.log'
+        'logs/{samples}.kraken2.log'
     conda:
         'envs/kraken2.yaml'
     threads: 12
