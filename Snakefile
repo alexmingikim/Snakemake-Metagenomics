@@ -21,7 +21,7 @@ onstart:
 # define samples from data directory using wildcards
 SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz') 
 
-reads = ['_R1_001', '_R2_001']
+READS = ['_R1_001', '_R2_001']
 
 # sanity check
 print("Found: ")
@@ -38,7 +38,7 @@ rule all:
         'results/ReadsMultiQCReportKneadData.html'
         
 
-rule fastqc1:
+rule fastqcR1:
     # quality control 
     input:
         # QC for files individually
@@ -59,7 +59,7 @@ rule fastqc1:
         '{input.fastq}'
 
 
-rule fastqc2:
+rule fastqcR2:
     # quality control 
     input:
         # QC for files individually
@@ -82,7 +82,7 @@ rule fastqc2:
 rule multiqc:
     # reporting tool 
     input: 
-        fastqc = expand('results/fastqc/{samples}{reads}_fastqc.zip', samples = SAMPLES, reads = reads)
+        fastqc = expand('results/fastqc/{samples}{reads}_fastqc.zip', samples = SAMPLES, reads = READS)
     output: 
         multiqc = 'results/ReadsMultiQCReportRawData.html'
     conda: 
@@ -103,6 +103,7 @@ rule kneaddata:
         fastq1 = 'fastq/{samples}_R1_001.fastq.gz', 
         fastq2 = 'fastq/{samples}_R2_001.fastq.gz'
     output: 
+        """
         # trim adapters ...
         trimReads = temp('results/kneaddata/{samples}_kneaddata.trimmed.fastq'),
         # trim repetitive sequences 
@@ -112,9 +113,20 @@ rule kneaddata:
         # trim 16S rRNA
         silvaReads = temp('results/kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
         # filtered reads 
-        cleanReads = 'results/kneaddata/{samples}_kneaddata.fastq'
+        clnReads1 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_1.fastq'
+        clnReads2 = 'results/kneaddata/{samples}_R1_
         # summary?
         # readStats = 'results/kneaddata/{samples_short}.read.stats.txt'
+        """
+        # reads from R1 identified as NOT belonging to any reference databases 
+        clnReadsR1 = 'results/kneaddata/{sample}_R1_001_kneaddata_paired_1.fastq'
+        # reads from R2 identified as NOT belonging to any reference databases 
+        clnReadsR2 = 'results/kneaddata/{sample}_R2_001_kneaddata_paired_2.fastq'
+
+        # cases when one of the reads do not pass quality filtering  
+        unmatchedR1 = temp('results/kneaddata/{sample}_R1_001_kneaddata_unmatched_1.fastq')
+        unmatchedR2 = temp('results/kneaddata/{sample}_R2_001_kneaddata_unmatched_2.fastq')
+        
     conda: 
         'envs/biobakery.yaml'
     log:
@@ -130,18 +142,36 @@ rule kneaddata:
         '--log-level INFO '
         '--log {log} '
         '--trimmomatic /home/kima/conda-envs/biobakery/share/trimmomatic-0.39-2 ' 
-        '--sequencer-source TruSeq3 ' # to identify adapter sequences? 
+        '--sequencer-source TruSeq3 ' # to identify correct adapter sequences
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
         '-o results/kneaddata'
         # 'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples_long}*.fastq > {output.readStats}'
 
 
-rule fastqcKDRs: 
+rule fastqcKDR1: 
     input: 
-        fastqc = rules.kneaddata.output.cleanReads
+        fastqc = rules.kneaddata.output.clnReadsR1
     output:
-        'results/fastqcKDR/{samples}_kneaddata_fastqc.zip'
+        'results/fastqcKDR/{samples}_R1_001_kneaddata_fastqc.zip'
+    conda: 
+        'envs/fastqc.yaml'
+    threads: 1
+    message: 
+        'Running quality checks on reads: {wildcards.samples}\n'
+    shell: 
+        'fastqc '
+        '-o results/fastqcKDR/ '
+        '-q '
+        '-t {threads} '
+        '{input.fastqc}'
+
+    
+    rule fastqcKDR2: 
+    input: 
+        fastqc = rules.kneaddata.output.clnReadsR2
+    output:
+        'results/fastqcKDR/{samples}_R2_001_kneaddata_fastqc.zip'
     conda: 
         'envs/fastqc.yaml'
     threads: 1
@@ -157,7 +187,7 @@ rule fastqcKDRs:
 
 rule multiQCKDRs: 
     input: 
-        fastqc = expand('results/fastqcKDR/{samples}_kneaddata_fastqc.zip', samples = SAMPLES)
+        fastqc = expand('results/fastqcKDR/{samples}{reads}_kneaddata_fastqc.zip', samples = SAMPLES, reads = READS)
     output: 
         'results/ReadsMultiQCReportKneadData.html'
     conda: 
