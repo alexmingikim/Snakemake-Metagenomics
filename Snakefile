@@ -167,7 +167,7 @@ rule fastqcKDR1:
         '{input.fastqc}'
 
     
-    rule fastqcKDR2: 
+rule fastqcKDR2: 
     input: 
         fastqc = rules.kneaddata.output.clnReadsR2
     output:
