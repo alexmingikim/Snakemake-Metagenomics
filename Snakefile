@@ -108,8 +108,8 @@ rule kneaddata:
         clnReadsR1 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_1.fastq',
         clnReadsR2 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_2.fastq',
         # cases when one of the reads do not pass quality filtering  
-        unmatchedR1 = temp('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_1.fastq'),
-        unmatchedR2 = temp('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_2.fastq')
+        unmatchedR1 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_1.fastq'),
+        unmatchedR2 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_2.fastq')
     conda: 
         'envs/biobakery.yaml'
     log:
@@ -134,7 +134,7 @@ rule kneaddata:
 
 rule fastqcKDR1: 
     input: 
-        fastqc = rules.kneaddata.output.clnReadsR1
+        fastqc = rules.kneaddata.output.unmatchedR1
     output:
         'results/fastqcKDR/{samples}_R1_001_kneaddata_fastqc.zip'
     conda: 
@@ -152,7 +152,7 @@ rule fastqcKDR1:
     
 rule fastqcKDR2: 
     input: 
-        fastqc = rules.kneaddata.output.clnReadsR2
+        fastqc = rules.kneaddata.output.unmatchedR2
     output:
         'results/fastqcKDR/{samples}_R2_001_kneaddata_fastqc.zip'
     conda: 
