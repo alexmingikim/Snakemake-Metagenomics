@@ -150,7 +150,8 @@ rule multiQCKDRs:
 rule kraken2:
     # taxonomic profiling 
     input:
-        KDRs = rules.kneaddata.output.cleanReads
+        reads1 = rules.kneaddata.output.clnReadsR1,
+        reads2 = rules.kneaddata.output.clnReadsR2
     output: 
         k2Output = 'results/kraken2/{samples}.out.k2',
         k2Report = 'results/kraken2/{samples}.report.k2'
@@ -159,13 +160,19 @@ rule kraken2:
     conda:
         'envs/kraken2.yaml'
     threads: 12
-    resources: mem_mb=180000
+    resources: 
+        mem_gb=146,
+        partition="inv-bigmem,inv-bigmem-fast"
     shell:
         'kraken2 '
+        '--paired '
+        '--use-names '
         '--db ref/kraken2 '
+        '-t {threads} '
         '--report {output.k2Report} '
         '--report-minimizer-data '
-        '{input.KDRs} > {output.k2Output)'
+        '{input.reads1} '
+        '{input.reads2}'
 """
 
 rule braken:
