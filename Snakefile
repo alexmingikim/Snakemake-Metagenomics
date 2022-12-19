@@ -110,7 +110,7 @@ rule kneaddata:
         '--sequencer-source TruSeq3 ' # to identify correct adapter sequences
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
-        '-o results/kneaddata ',
+        '-o results/kneaddata '
         'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
 
 
