@@ -50,7 +50,7 @@ rule merge:
 rule fastqc:
     # quality control 
     input:
-        fastq = rules.merge.output.mergedReads
+        fastq = 'fastq/mergedReads/{samples}_merged_fastq.gz'
     output: 
         html = 'results/fastqc/{samples}_merged_fastqc.html',
         zip = 'results/fastqc/{samples}_merged_fastqc.zip'
