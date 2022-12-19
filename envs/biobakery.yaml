@@ -73,6 +73,7 @@ dependencies:
   - python_abi=3.10=3_cp310
   - readline=8.1.2=h0f457ee_0
   - samtools=1.6=h3f2fef4_8
+  - seqkit=2.3.1=h9ee0642_0
   - setuptools=65.5.1=pyhd8ed1ab_0
   - tbb=2021.7.0=h924138e_1
   - tk=8.6.12=h27826a3_0

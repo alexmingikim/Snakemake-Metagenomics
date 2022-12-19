@@ -90,6 +90,8 @@ rule kneaddata:
         # cases when one of the reads do not pass quality filtering  
         unmatchedR1 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_1.fastq'),
         unmatchedR2 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_2.fastq')
+        # seqkit stats
+        readStats = 'results/seqkit/{samples}.read.stats.txt'
     conda: 
         'envs/biobakery.yaml'
     log:
@@ -109,7 +111,7 @@ rule kneaddata:
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
         '-o results/kneaddata'
-        # 'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples_long}*.fastq > {output.readStats}'
+        'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
 
 
 rule fastqcKDR: 
