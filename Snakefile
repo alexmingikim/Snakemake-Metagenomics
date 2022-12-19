@@ -44,7 +44,7 @@ rule merge:
     output:
         mergedReads = 'fastq/mergedReads/{samples}_merged_fastq.gz'
     shell:
-        'cat {input.read1} {input.read2} > {output.mergedReads}'
+        'cat fastq/{samples}_R1_001.fastq.gz fastq/{samples}_R2_001.fastq.gz > fastq/mergedReads/{samples}_merged_fastq.gz'
 
 
 rule fastqc:
@@ -62,7 +62,7 @@ rule fastqc:
     shell:
         'fastqc '
         '-o results/fastqc/ '
-        '-q ' # suppress progress messages; only report errors 
+        '-q ' 
         '-t {threads} '
         '{input.fastq}'
 
