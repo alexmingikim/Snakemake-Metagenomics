@@ -89,7 +89,7 @@ rule kneaddata:
         clnReadsR2 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_2.fastq',
         # cases when one of the reads do not pass quality filtering  
         unmatchedR1 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_1.fastq'),
-        unmatchedR2 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_2.fastq')
+        unmatchedR2 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_2.fastq'),
         # seqkit stats
         readStats = 'results/seqkit/{samples}.read.stats.txt'
     conda: 
@@ -110,7 +110,7 @@ rule kneaddata:
         '--sequencer-source TruSeq3 ' # to identify correct adapter sequences
         '-db ref/ARS_UI_Ramb_v2 '
         '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
-        '-o results/kneaddata'
+        '-o results/kneaddata ',
         'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
 
 
