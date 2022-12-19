@@ -110,7 +110,7 @@ rule kneaddata:
         'kneaddata: {wildcards.samples}\n'
     shell:
         'kneaddata '
-        '--input {input.fastq} '
+        '--unpaired {input.fastq} '
         '-t {threads} '
         '--log-level INFO '
         '--log {log} '
