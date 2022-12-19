@@ -21,8 +21,6 @@ onstart:
 # define samples from data directory using wildcards
 SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz') 
 
-READS = ['_R1_001', '_R2_001']
-KNEADDATA = ['_kneaddata_paired_1', '_kneaddata_paired_2', '_kneaddata_unmatched_1', '_kneaddata_unmatched_2']
 
 # sanity check
 print("Found: ")
@@ -39,14 +37,23 @@ rule all:
         'results/ReadsMultiQCReportKneadData.html'
         
 
+rule merge:
+    input: 
+        read1 = 'fastq/{samples}_R1_001.fastq.gz',
+        read2 = 'fastq/{samples}_R2_001.fastq.gz'
+    output:
+        mergedReads = 'fastq/mergedReads/{samples}_merged_fastq.gz'
+    shell:
+        cat {input.read1} {input.read2} > {output.mergedRead}
+
+
 rule fastqc:
     # quality control 
     input:
-        # QC for files individually
-        fastq = ['fastq/{samples}_R1_001.fastq.gz', 'fastq/{samples}_R2_001.fastq.gz']
+        fastq = rules.merge.output.mergedReads
     output: 
-        html = ['results/fastqc/{samples}_R1_001_fastqc.html', 'results/fastqc/{samples}_R2_001_fastqc.html'],
-        zip = ['results/fastqc/{samples}_R1_001_fastqc.zip', 'results/fastqc/{samples}_R2_001_fastqc.zip']
+        html = 'results/fastqc/{samples}_merged_fastqc.html',
+        zip = 'results/fastqc/{samples}_merged_fastqc.zip'
     conda: 
         'envs/fastqc.yaml'
     threads: 1 
@@ -63,7 +70,7 @@ rule fastqc:
 rule multiqc:
     # reporting tool 
     input: 
-        fastqc = expand('results/fastqc/{samples}{reads}_fastqc.zip', samples = SAMPLES, reads = READS)
+        fastqc = expand('results/fastqc/{samples}_merged_fastqc.zip', samples = SAMPLES)
     output: 
         multiqc = 'results/ReadsMultiQCReportRawData.html'
     conda: 
@@ -71,25 +78,27 @@ rule multiqc:
     shell:
         'multiqc '
         '-n results/ReadsMultiQCReportRawData '
-        '-s ' # to not clean sample names 
-        '-f ' # overwrite existing reports 
-        '--interactive ' # interactive plots 
+        '-s ' 
+        '-f ' 
+        '--interactive ' 
         '{input.fastqc}'
 
 
 rule kneaddata: 
     # quality control - separate bacterial reads from contaminant reads (host, bacterial 16S sequences) 
     input: 
-        ### two inputs for paired end reads? ###
-        fastq1 = 'fastq/{samples}_R1_001.fastq.gz', 
-        fastq2 = 'fastq/{samples}_R2_001.fastq.gz'
+        fastq = fastq = rules.merge.output.mergedReads
     output: 
-        # reads from R1, R2 identified as NOT belonging to any reference databases 
-        clnReadsR1 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_1.fastq',
-        clnReadsR2 = 'results/kneaddata/{samples}_R1_001_kneaddata_paired_2.fastq',
-        # cases when one of the reads do not pass quality filtering  
-        unmatchedR1 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_1.fastq'),
-        unmatchedR2 = ('results/kneaddata/{samples}_R1_001_kneaddata_unmatched_2.fastq'),
+        # trim adapters ...
+        trimReads = temp('results/kneaddata/{samples}_kneaddata.trimmed.fastq'),
+        # trim repetitive sequences 
+        trfReads = temp('results/kneaddata/{samples}_kneaddata.repeats.removed.fastq'),
+        # trim host DNA 
+        ovineReads = temp('results/kneaddata/{samples}_kneaddata_ARS_UI_Ramb_v2_bowtie_contam.fastq'),
+        # trim 16S rRNA
+        silvaReads = temp('results/kneaddata/{samples}_kneaddata_SILVA_128_LSUParc_SSUParc_ribosomal_RNA_bowtie2_contam.fastq'),
+        # filtered reads 
+        clnReads = 'results/kneaddata/{samples}_kneaddata.fastq',
         # seqkit stats
         readStats = 'results/seqkit/{samples}.read.stats.txt'
     conda: 
@@ -101,8 +110,7 @@ rule kneaddata:
         'kneaddata: {wildcards.samples}\n'
     shell:
         'kneaddata '
-        '--input1 {input.fastq1} '
-        '--input2 {input.fastq2} '
+        '--input {input.fastq} '
         '-t {threads} '
         '--log-level INFO '
         '--log {log} '
@@ -116,9 +124,9 @@ rule kneaddata:
 
 rule fastqcKDR: 
     input: 
-        fastqc = [rules.kneaddata.output.clnReadsR1, rules.kneaddata.output.clnReadsR2, rules.kneaddata.output.unmatchedR1, rules.kneaddata.output.unmatchedR2]
+        fastqc = rules.kneaddata.output.clnReads
     output:
-        zip = ['results/fastqcKDR/{samples}_R1_001_kneaddata_paired_1_fastqc.zip', 'results/fastqcKDR/{samples}_R1_001_kneaddata_paired_2_fastqc.zip', 'results/fastqcKDR/{samples}_R1_001_kneaddata_unmatched_1_fastqc.zip', 'results/fastqcKDR/{samples}_R1_001_kneaddata_unmatched_2_fastqc.zip'] 
+        zip = 'results/fastqcKDR/{samples}_kneaddata_fastqc.zip'
     conda: 
         'envs/fastqc.yaml'
     threads: 1
@@ -134,7 +142,7 @@ rule fastqcKDR:
 
 rule multiQCKDRs: 
     input: 
-        fastqc = expand('results/fastqcKDR/{samples}_R1_001{kneaddata}_fastqc.zip', samples = SAMPLES, reads = READS, kneaddata = KNEADDATA)
+        fastqc = expand('results/fastqcKDR/{samples}_kneaddata_fastqc.zip', samples = SAMPLES)
     output: 
         'results/ReadsMultiQCReportKneadData.html'
     conda: 
@@ -167,14 +175,12 @@ rule kraken2:
         partition="inv-bigmem,inv-bigmem-fast"
     shell:
         'kraken2 '
-        '--paired '
         '--use-names '
         '--db ref/kraken2 '
         '-t {threads} '
         '--report {output.k2Report} '
         '--report-minimizer-data '
-        '{input.reads1} '
-        '{input.reads2}'
+        '{input.reads1}'
 """
 
 rule braken:
