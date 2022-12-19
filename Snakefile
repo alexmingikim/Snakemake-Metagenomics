@@ -22,6 +22,7 @@ onstart:
 SAMPLES, = glob_wildcards('fastq/{samples}_R1_001.fastq.gz') 
 
 READS = ['_R1_001', '_R2_001']
+KNEADDATA = ['_kneaddata_paired_1', '_kneaddata_paired_2', '_kneaddata_unmatched_1', '_kneaddata_unmatched_2']
 
 # sanity check
 print("Found: ")
@@ -38,40 +39,19 @@ rule all:
         'results/ReadsMultiQCReportKneadData.html'
         
 
-rule fastqcR1:
+rule fastqc:
     # quality control 
     input:
         # QC for files individually
-        fastq = 'fastq/{samples}_R1_001.fastq.gz'
+        fastq = ['fastq/{samples}_R1_001.fastq.gz', 'fastq/{samples}_R2_001.fastq.gz']
     output: 
-        html = 'results/fastqc/{samples}_R1_001_fastqc.html',
-        zip = 'results/fastqc/{samples}_R1_001_fastqc.zip'
+        html = ['results/fastqc/{samples}_R1_001_fastqc.html', 'results/fastqc/{samples}_R2_001_fastqc.html'],
+        zip = ['results/fastqc/{samples}_R1_001_fastqc.zip', 'results/fastqc/{samples}_R2_001_fastqc.zip']
     conda: 
         'envs/fastqc.yaml'
     threads: 1 
     message: 
-        'Running quality checks on reads: {wildcards.samples}_R1_001\n'
-    shell:
-        'fastqc '
-        '-o results/fastqc/ '
-        '-q ' # suppress progress messages; only report errors 
-        '-t {threads} '
-        '{input.fastq}'
-
-
-rule fastqcR2:
-    # quality control 
-    input:
-        # QC for files individually
-        fastq = 'fastq/{samples}_R2_001.fastq.gz'
-    output: 
-        html = 'results/fastqc/{samples}_R2_001_fastqc.html',
-        zip = 'results/fastqc/{samples}_R2_001_fastqc.zip'
-    conda: 
-        'envs/fastqc.yaml'
-    threads: 1 
-    message: 
-        'Running quality checks on reads: {wildcards.samples}_R2_001\n'
+        'Running quality checks on reads: {wildcards.samples}\n'
     shell:
         'fastqc '
         '-o results/fastqc/ '
@@ -132,29 +112,11 @@ rule kneaddata:
         # 'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples_long}*.fastq > {output.readStats}'
 
 
-rule fastqcKDR1: 
+rule fastqcKDR: 
     input: 
-        fastqc = rules.kneaddata.output.unmatchedR1
+        fastqc = [rules.kneaddata.output.clnReadsR1, rules.kneaddata.output.clnReadsR2, rules.kneaddata.output.unmatchedR1, rules.kneaddata.output.unmatchedR2]
     output:
-        'results/fastqcKDR/{samples}_R1_001_kneaddata_fastqc.zip'
-    conda: 
-        'envs/fastqc.yaml'
-    threads: 1
-    message: 
-        'Running quality checks on reads: {wildcards.samples}\n'
-    shell: 
-        'fastqc '
-        '-o results/fastqcKDR/ '
-        '-q '
-        '-t {threads} '
-        '{input.fastqc}'
-
-    
-rule fastqcKDR2: 
-    input: 
-        fastqc = rules.kneaddata.output.unmatchedR2
-    output:
-        'results/fastqcKDR/{samples}_R2_001_kneaddata_fastqc.zip'
+        zip = ['results/fastqcKDR/{samples}_R1_001_kneaddata_paired_1_fastqc.zip', 'results/fastqcKDR/{samples}_R1_001_kneaddata_paired_2_fastqc.zip', 'results/fastqcKDR/{samples}_R1_001_kneaddata_unmatched_1_fastqc.zip', 'results/fastqcKDR/{samples}_R1_001_kneaddata_unmatched_2_fastqc.zip'] 
     conda: 
         'envs/fastqc.yaml'
     threads: 1
@@ -170,7 +132,7 @@ rule fastqcKDR2:
 
 rule multiQCKDRs: 
     input: 
-        fastqc = expand('results/fastqcKDR/{samples}{reads}_kneaddata_fastqc.zip', samples = SAMPLES, reads = READS)
+        fastqc = expand('results/fastqcKDR/{samples}{reads}{kneaddata}_fastqc.zip', samples = SAMPLES, reads = READS, kneaddata = KNEADDATA)
     output: 
         'results/ReadsMultiQCReportKneadData.html'
     conda: 
