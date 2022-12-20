@@ -29,4 +29,4 @@ use-conda: True
 use-singularity: True
 reason: True
 cluster-cancel: scancel -u kima
-jobs: 20
+jobs: 12
