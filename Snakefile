@@ -42,15 +42,15 @@ rule merge:
         read1 = 'fastq/{samples}_R1_001.fastq.gz',
         read2 = 'fastq/{samples}_R2_001.fastq.gz'
     output:
-        mergedReads = 'fastq/mergedReads/{samples}_fastq.gz'
+        mergedReads = 'fastq/mergedReads/{samples}.fastq.gz'
     shell:
-        'cat fastq/{wildcards.samples}_R1_001.fastq.gz fastq/{wildcards.samples}_R2_001.fastq.gz > fastq/mergedReads/{wildcards.samples}_fastq.gz'
+        'cat fastq/{wildcards.samples}_R1_001.fastq.gz fastq/{wildcards.samples}_R2_001.fastq.gz > fastq/mergedReads/{wildcards.samples}.fastq.gz'
 
 
 rule fastqc:
     # quality control 
     input:
-        fastq = 'fastq/mergedReads/{samples}_fastq.gz'
+        fastq = 'fastq/mergedReads/{samples}.fastq.gz'
     output: 
         html = 'results/fastqc/{samples}_fastqc.html',
         zip = 'results/fastqc/{samples}_fastqc.zip'
