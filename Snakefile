@@ -160,8 +160,7 @@ rule multiQCKDRs:
 rule kraken2:
     # taxonomic profiling 
     input:
-        reads1 = rules.kneaddata.output.clnReadsR1,
-        reads2 = rules.kneaddata.output.clnReadsR2
+        KDRs = rules.kneaddata.output.clnReads
     output: 
         k2Output = 'results/kraken2/{samples}.out.k2',
         k2Report = 'results/kraken2/{samples}.report.k2'
@@ -180,7 +179,7 @@ rule kraken2:
         '-t {threads} '
         '--report {output.k2Report} '
         '--report-minimizer-data '
-        '{input.reads1}'
+        '{input.KDRs} > {output.k2Output}'
 """
 
 rule braken:
