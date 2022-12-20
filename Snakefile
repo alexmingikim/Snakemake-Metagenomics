@@ -174,7 +174,7 @@ rule kraken2GTDB:
     shell:
         'kraken2 '
         '--use-names '
-        '--db /dataset/2022-BJP-GTDB/active/kraken/GTDB '
+        '--db /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken '
         '-t {threads} '
         '--report {output.k2ReportGTDB} '
         '--report-minimizer-data '
