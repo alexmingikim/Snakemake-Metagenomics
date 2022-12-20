@@ -159,7 +159,7 @@ rule multiQCKDRs:
 rule kraken2GTDB:
     # taxonomic profiling 
     input:
-        KDRs = rules.kneaddata.output.clnReads
+        KDRs = 'results/kneaddata/{samples}_kneaddata.fastq'
     output: 
         k2OutputGTDB = 'results/kraken2GTDB/{samples}.GTDB.out.k2',
         k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.report.k2'
