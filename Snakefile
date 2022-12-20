@@ -180,12 +180,11 @@ rule kraken2GTDB:
         '--report-minimizer-data '
         '{input.KDRs} > {output.k2OutputGTDB}'
 
-
 """
-rule braken:
+rule bracken:
     # compute abundance 
     input:
-        k2out = rules.kraken2GTDB.output.k2OutputGTDB
+        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.report.k2'
     output:
         'results/braken/{samples}.braken.out'
     log:
@@ -193,11 +192,20 @@ rule braken:
     conda:
     threads: 8
     shell: 
+        'bracken '
+        '--log {log} '
+        '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken '
+        '-i results/kraken2GTDB/{samples}.GTDB.report.k2 '
+        '-o results/bracken/{samples}.bracken.out '
+        # '-r 35 ' # default
+        # '-l S '  # default
+        # '-t THRESHOLD'
+"""
 
 
 #  merge kraken2 reports using utility scripts 
 
-
+""
 rule humann3:
     # functional profiling
 """
