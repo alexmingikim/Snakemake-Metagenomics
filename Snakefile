@@ -42,18 +42,18 @@ rule merge:
         read1 = 'fastq/{samples}_R1_001.fastq.gz',
         read2 = 'fastq/{samples}_R2_001.fastq.gz'
     output:
-        mergedReads = 'fastq/mergedReads/{samples}_merged_fastq.gz'
+        mergedReads = 'fastq/mergedReads/{samples}_fastq.gz'
     shell:
-        'cat fastq/{wildcards.samples}_R1_001.fastq.gz fastq/{wildcards.samples}_R2_001.fastq.gz > fastq/mergedReads/{wildcards.samples}_merged_fastq.gz'
+        'cat fastq/{wildcards.samples}_R1_001.fastq.gz fastq/{wildcards.samples}_R2_001.fastq.gz > fastq/mergedReads/{wildcards.samples}_fastq.gz'
 
 
 rule fastqc:
     # quality control 
     input:
-        fastq = 'fastq/mergedReads/{samples}_merged_fastq.gz'
+        fastq = 'fastq/mergedReads/{samples}_fastq.gz'
     output: 
-        html = 'results/fastqc/{samples}_merged_fastqc.html',
-        zip = 'results/fastqc/{samples}_merged_fastqc.zip'
+        html = 'results/fastqc/{samples}_fastqc.html',
+        zip = 'results/fastqc/{samples}_fastqc.zip'
     conda: 
         'envs/fastqc.yaml'
     threads: 1 
@@ -70,7 +70,7 @@ rule fastqc:
 rule multiqc:
     # reporting tool 
     input: 
-        fastqc = expand('results/fastqc/{samples}_merged_fastqc.zip', samples = SAMPLES)
+        fastqc = expand('results/fastqc/{samples}_fastqc.zip', samples = SAMPLES)
     output: 
         multiqc = 'results/ReadsMultiQCReportRawData.html'
     conda: 
