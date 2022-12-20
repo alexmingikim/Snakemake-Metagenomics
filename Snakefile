@@ -156,33 +156,34 @@ rule multiQCKDRs:
         '{input.fastqc}'
 
 
-"""
-rule kraken2:
+rule kraken2GTDB:
     # taxonomic profiling 
     input:
         KDRs = rules.kneaddata.output.clnReads
     output: 
-        k2Output = 'results/kraken2/{samples}.out.k2',
-        k2Report = 'results/kraken2/{samples}.report.k2'
+        k2OutputGTDB = 'results/kraken2GTDB/{samples}.GTDB.out.k2',
+        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.report.k2'
     log:
-        'logs/{samples}.kraken2.log'
+        'logs/kraken2GTDB/{samples}.kraken2.GTDB.log'
     conda:
         'envs/kraken2.yaml'
-    threads: 12
+    threads: 20
     resources: 
-        mem_gb=146,
+        mem_gb=324,
         partition="inv-bigmem,inv-bigmem-fast"
     shell:
         'kraken2 '
         '--use-names '
-        '--db ref/kraken2 '
+        # '--db ref/kraken2 '
         '-t {threads} '
-        '--report {output.k2Report} '
+        '--report {output.k2ReportGTDB} '
         '--report-minimizer-data '
-        '{input.KDRs} > {output.k2Output}'
-"""
+        '{input.KDRs} > {output.k2OutputGTDB}'
+
 
 rule braken:
     # compute abundance 
+
+
 
 #  merge kraken2 reports using utility scripts 
