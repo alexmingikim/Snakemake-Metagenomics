@@ -87,7 +87,7 @@ rule multiqc:
 rule kneaddata: 
     # quality control - separate bacterial reads from contaminant reads (host, bacterial 16S sequences) 
     input: 
-        fastq = rules.merge.output.mergedReads
+        fastq = 'fastq/mergedReads/{samples}.fastq.gz'
     output: 
         # trim adapters ...
         trimReads = temp('results/kneaddata/{samples}_kneaddata.trimmed.fastq'),
