@@ -181,9 +181,23 @@ rule kraken2GTDB:
         '{input.KDRs} > {output.k2OutputGTDB}'
 
 
+"""
 rule braken:
     # compute abundance 
-
-
+    input:
+        k2out = rules.kraken2GTDB.output.k2OutputGTDB
+    output:
+        'results/braken/{samples}.braken.out'
+    log:
+        'logs/braken/{samples}.braken.log'
+    conda:
+    threads: 8
+    shell: 
+    
 
 #  merge kraken2 reports using utility scripts 
+
+
+rule humann3:
+    # functional profiling
+"""
