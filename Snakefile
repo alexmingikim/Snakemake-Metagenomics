@@ -44,7 +44,7 @@ rule merge:
     output:
         mergedReads = 'fastq/mergedReads/{samples}.fastq.gz'
     shell:
-        'cat fastq/{wildcards.samples}_R1_001.fastq.gz fastq/{wildcards.samples}_R2_001.fastq.gz > fastq/mergedReads/{wildcards.samples}.fastq.gz'
+        'cat {input.read1} {input.read2} > {output.mergedReads}'
 
 
 rule fastqc:
