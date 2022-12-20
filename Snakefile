@@ -31,7 +31,7 @@ print("")
 rule all:
     input: 
         # kraken2 report 
-        # expand('results/kraken2/{samples}.report.k2', samples = SAMPLES), 
+        expand('results/kraken2GTDB/{samples}.GTDB.report.k2', samples = SAMPLES), 
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
         'results/ReadsMultiQCReportKneadData.html'
@@ -174,7 +174,7 @@ rule kraken2GTDB:
     shell:
         'kraken2 '
         '--use-names '
-        # '--db ref/kraken2 '
+        '--db /dataset/2022-BJP-GTDB/active/kraken/GTDB '
         '-t {threads} '
         '--report {output.k2ReportGTDB} '
         '--report-minimizer-data '
@@ -193,7 +193,7 @@ rule braken:
     conda:
     threads: 8
     shell: 
-    
+
 
 #  merge kraken2 reports using utility scripts 
 
