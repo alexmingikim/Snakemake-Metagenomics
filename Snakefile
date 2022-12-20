@@ -42,7 +42,7 @@ rule merge:
         read1 = 'fastq/{samples}_R1_001.fastq.gz',
         read2 = 'fastq/{samples}_R2_001.fastq.gz'
     output:
-        mergedReads = 'fastq/mergedReads/{samples}.fastq.gz'
+        mergedReads = 'results/mergedReads/{samples}.fastq.gz'
     shell:
         'cat {input.read1} {input.read2} > {output.mergedReads}'
 
@@ -50,7 +50,7 @@ rule merge:
 rule fastqc:
     # quality control 
     input:
-        fastq = 'fastq/mergedReads/{samples}.fastq.gz'
+        fastq = 'results/mergedReads/{samples}.fastq.gz'
     output: 
         html = 'results/fastqc/{samples}_fastqc.html',
         zip = 'results/fastqc/{samples}_fastqc.zip'
@@ -87,7 +87,7 @@ rule multiqc:
 rule kneaddata: 
     # quality control - separate bacterial reads from contaminant reads (host, bacterial 16S sequences) 
     input: 
-        fastq = 'fastq/mergedReads/{samples}.fastq.gz'
+        fastq = 'results/mergedReads/{samples}.fastq.gz'
     output: 
         # trim adapters ...
         trimReads = temp('results/kneaddata/{samples}_kneaddata.trimmed.fastq'),
