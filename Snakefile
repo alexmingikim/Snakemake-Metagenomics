@@ -198,8 +198,8 @@ rule bracken:
         'bracken '
         '--log {log} '
         '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken '
-        '-i results/kraken2GTDB/{samples}.GTDB.report.k2 '
-        '-o results/bracken/{samples}.bracken.out '
+        '-i results/kraken2GTDB/{wildcards.samples}.GTDB.report.k2 '
+        '-o results/bracken/{wildcards.samples}.bracken.out '
         '-r 35 ' # default
         '-l S '  # default
         '-t 10' # default 
