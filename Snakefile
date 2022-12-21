@@ -200,9 +200,9 @@ rule bracken:
         '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
         '-i results/kraken2GTDB/{wildcards.samples}.GTDB.report.k2 '
         '-o results/bracken/{wildcards.samples}.bracken.out '
-        '-r 35 ' # default
+        '-r 100 ' # default
         '-l S '  # default
-        '-t 10' # default 
+        '-t 0' # default 
 
 
 #  merge kraken2 reports using utility scripts 
