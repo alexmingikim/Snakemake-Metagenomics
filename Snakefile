@@ -205,7 +205,6 @@ rule bracken:
 
 #  merge kraken2 reports using utility scripts 
 
-""
+
 rule humann3:
     # functional profiling
-"""
