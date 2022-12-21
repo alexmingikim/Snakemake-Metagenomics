@@ -168,7 +168,7 @@ rule kraken2GTDB:
     log:
         'logs/kraken2GTDB/{samples}.kraken2.GTDB.log'
     conda:
-        'envs/kraken2_bracken.yaml'
+        'envs/kraken2.yaml'
     threads: 20
     resources: 
         mem_gb=360,
@@ -192,7 +192,7 @@ rule bracken:
     log:
         'logs/bracken/{samples}.bracken.log'
     conda:
-        'envs/kraken2_bracken.yaml'
+        'envs/bracken.yaml'
     threads: 8
     shell: 
         'bracken '
