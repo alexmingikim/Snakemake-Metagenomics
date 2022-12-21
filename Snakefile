@@ -176,7 +176,7 @@ rule kraken2GTDB:
     shell:
         'kraken2 '
         '--use-names '
-        '--db /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken '
+        '--db /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
         '-t {threads} '
         '--report {output.k2ReportGTDB} '
         '--report-minimizer-data '
@@ -197,7 +197,7 @@ rule bracken:
     shell: 
         'bracken '
         '--log {log} '
-        '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken '
+        '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
         '-i results/kraken2GTDB/{wildcards.samples}.GTDB.report.k2 '
         '-o results/bracken/{wildcards.samples}.bracken.out '
         '-r 35 ' # default
