@@ -186,9 +186,9 @@ rule bracken:
     input:
         k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.report.k2'
     output:
-        'results/bracken/{samples}.bracken.out'
+        'results/bracken/{samples}.braken.out'
     log:
-        'logs/bracken/{samples}.bracken.log'
+        'logs/bracken/{samples}.braken.log'
     conda:
         'envs/kraken2_bracken.yaml'
     threads: 8
