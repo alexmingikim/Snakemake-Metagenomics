@@ -31,7 +31,9 @@ print("")
 rule all:
     input: 
         # kraken2 report 
-        expand('results/kraken2GTDB/{samples}.GTDB.report.k2', samples = SAMPLES), 
+        expand('results/kraken2GTDB/{samples}.GTDB.report.k2', samples = SAMPLES),
+        # bracken outputs
+        expand('results/bracken/{samples}.bracken.out', samples = SAMPLES),
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
         'results/ReadsMultiQCReportKneadData.html'
