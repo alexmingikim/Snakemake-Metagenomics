@@ -33,7 +33,7 @@ rule all:
         # kraken2 report 
         expand('results/kraken2GTDB/{samples}.GTDB.report.k2', samples = SAMPLES),
         # bracken outputs
-        expand('results/bracken/{samples}.bracken.out', samples = SAMPLES),
+        expand('results/bracken/{samples}.bracken', samples = SAMPLES),
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
         'results/ReadsMultiQCReportKneadData.html'
