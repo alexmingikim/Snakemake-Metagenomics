@@ -200,7 +200,7 @@ rule bracken:
         '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
         '-i results/kraken2GTDB/{wildcards.samples}.GTDB.report.k2 '
         '-o results/bracken/{wildcards.samples}.bracken '
-        '-w results/bracken/(wildcards.samples}.breport '
+        '-w results/bracken/{wildcards.samples}.breport '
         '-r 240 ' # average read length
         '-l S '  # species
         '-t 10' # remove low abundance species (noise)  
