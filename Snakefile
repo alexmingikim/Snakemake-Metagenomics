@@ -188,7 +188,8 @@ rule bracken:
     input:
         k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.report.k2'
     output:
-        'results/bracken/{samples}.bracken'
+        'results/bracken/{samples}.bracken',
+        'results/bracken/{samples}.breport'
     log:
         'logs/bracken/{samples}.bracken.log'
     conda:
