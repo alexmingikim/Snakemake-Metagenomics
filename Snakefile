@@ -33,7 +33,7 @@ rule all:
         # kraken2 report 
         expand('results/kraken2GTDB/{samples}.GTDB.kreport2', samples = SAMPLES),
         # bracken outputs
-        expand('results/bracken/{samples}.bracken', samples = SAMPLES),
+        # expand('results/bracken/{samples}.bracken', samples = SAMPLES),
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
         'results/ReadsMultiQCReportKneadData.html'
@@ -172,7 +172,7 @@ rule kraken2GTDB:
     threads: 20
     resources: 
         mem_gb=360,
-        partition="inv-bigmem,inv-bigmem-fast"
+        partition="inv-bigmem-fast"
     shell:
         'kraken2 '
         '--use-names '
