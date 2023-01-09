@@ -199,7 +199,7 @@ rule bracken:
         'bracken '
         '--log {log} '
         '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
-        '-i results/kraken2GTDB/{wildcards.samples}.GTDB.kreport2 '
+        '-i results/kraken2GTDB/{wildcards.samples}.GTDB.k2report '
         '-o results/bracken/{wildcards.samples}.bracken '
         '-w results/bracken/{wildcards.samples}.breport '
         '-r 240 ' # average read length
