@@ -31,7 +31,7 @@ print("")
 rule all:
     input: 
         # kraken2 report 
-        expand('results/kraken2GTDB/{samples}.GTDB.report.k2', samples = SAMPLES),
+        expand('results/kraken2GTDB/{samples}.GTDB.kreport', samples = SAMPLES),
         # bracken outputs
         expand('results/bracken/{samples}.bracken', samples = SAMPLES),
         # multiqc reports (raw data and knead data)
@@ -164,7 +164,7 @@ rule kraken2GTDB:
         KDRs = 'results/kneaddata/{samples}_kneaddata.fastq'
     output: 
         k2OutputGTDB = 'results/kraken2GTDB/{samples}.GTDB.out.k2',
-        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.report.k2'
+        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.kreport'
     log:
         'logs/kraken2GTDB/{samples}.kraken2.GTDB.log'
     conda:
@@ -186,7 +186,7 @@ rule kraken2GTDB:
 rule bracken:
     # compute abundance 
     input:
-        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.report.k2'
+        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.kreport'
     output:
         'results/bracken/{samples}.bracken',
         'results/bracken/{samples}.breport'
@@ -199,7 +199,7 @@ rule bracken:
         'bracken '
         '--log {log} '
         '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
-        '-i results/kraken2GTDB/{wildcards.samples}.GTDB.report.k2 '
+        '-i results/kraken2GTDB/{wildcards.samples}.GTDB.kreport '
         '-o results/bracken/{wildcards.samples}.bracken '
         '-w results/bracken/{wildcards.samples}.breport '
         '-r 240 ' # average read length
