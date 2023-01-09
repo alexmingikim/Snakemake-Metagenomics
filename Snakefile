@@ -172,7 +172,7 @@ rule kraken2GTDB:
     threads: 20
     resources: 
         mem_gb=360,
-        partition="inv-bigmem-fast"
+        partition="inv-bigmem"
     shell:
         'kraken2 '
         '--use-names '
