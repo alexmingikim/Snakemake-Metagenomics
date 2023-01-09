@@ -31,7 +31,7 @@ print("")
 rule all:
     input: 
         # kraken2 report 
-        expand('results/kraken2GTDB/{samples}.GTDB.kreport2', samples = SAMPLES),
+        expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
         # bracken outputs
         # expand('results/bracken/{samples}.bracken', samples = SAMPLES),
         # multiqc reports (raw data and knead data)
@@ -163,8 +163,8 @@ rule kraken2GTDB:
     input:
         KDRs = 'results/kneaddata/{samples}_kneaddata.fastq'
     output: 
-        k2OutputGTDB = 'results/kraken2GTDB/{samples}.GTDB.out.k2',
-        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.kreport2'
+        k2OutputGTDB = 'results/kraken2GTDB/{samples}.GTDB.kraken2',
+        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.k2report'
     log:
         'logs/kraken2GTDB/{samples}.kraken2.GTDB.log'
     conda:
@@ -172,7 +172,7 @@ rule kraken2GTDB:
     threads: 20
     resources: 
         mem_gb=360,
-        partition="inv-bigmem"
+        partition="inv-bigmem-fast"
     shell:
         'kraken2 '
         '--use-names '
@@ -186,7 +186,7 @@ rule kraken2GTDB:
 rule bracken:
     # compute abundance 
     input:
-        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.kreport2'
+        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.k2report'
     output:
         'results/bracken/{samples}.bracken',
         'results/bracken/{samples}.breport'
