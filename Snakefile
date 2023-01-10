@@ -223,11 +223,13 @@ rule humann3:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb=24
+        mem_gb=12,
+        partition="inv-iranui"
     message:
         'humann3 profiling: {wildcards.samples}\n'
     shell:
         'humann3 ' 
+        '--memory-use minimum '
         '--threads {threads} '
         '--bypass-nucleotide-index '
         '--search-mode uniref50 '
@@ -253,11 +255,13 @@ rule humann3protein:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb=24
+        mem_gb=12,
+        partition="inv-iranui"
     message:
         'humann3 profiling: {wildcards.samples}\n'
     shell:
         'humann3 ' 
+        '--memory-use minimum '
         '--threads {threads} '
         '--bypass-nucleotide-search '
         '--search-mode uniref50 '
