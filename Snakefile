@@ -234,7 +234,7 @@ rule humann3:
         '--input-format fastq '
         '--output results/humann3 '
         '--input {input.KDRs} '
-        '--output-basename {samples} '
+        '--output-basename {wildcards.samples} '
         '--o-log {log} '
 
 rule humann3protein:
@@ -261,5 +261,5 @@ rule humann3protein:
         '--input-format fastq '
         '--output results/humann3protein '
         '--input {input.KDRs} '
-        '--output-basename {samples} '
+        '--output-basename {wildcards.samples} '
         '--o-log {log} '
