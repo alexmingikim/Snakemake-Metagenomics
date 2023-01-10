@@ -222,6 +222,8 @@ rule humann3:
     conda:
         'envs/humann3.yaml'
     threads: 10
+    resources: 
+        mem_gb=24
     message:
         'humann3 profiling: {wildcards.samples}\n'
     shell:
@@ -235,7 +237,7 @@ rule humann3:
         '--output results/humann3 '
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
-        '--o-log {log} '
+        '--o-log {log}'
 
 rule humann3protein:
     # functional profiling
@@ -250,6 +252,8 @@ rule humann3protein:
     conda:
         'envs/humann3.yaml'
     threads: 10
+    resources: 
+        mem_gb=24
     message:
         'humann3 profiling: {wildcards.samples}\n'
     shell:
@@ -262,4 +266,4 @@ rule humann3protein:
         '--output results/humann3protein '
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
-        '--o-log {log} '
+        '--o-log {log}'
