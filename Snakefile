@@ -118,8 +118,8 @@ rule kneaddata:
         '--log {log} '
         '--trimmomatic /home/kima/conda-envs/biobakery/share/trimmomatic-0.39-2 ' 
         '--sequencer-source TruSeq3 ' # to identify correct adapter sequences
-        '-db ref/ARS_UI_Ramb_v2 '
-        '-db ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
+        '-db /bifo/scratch//2022-AK-MBIE-Rumen-MG/ref/ARS_UI_Ramb_v2 '
+        '-db /bifo/scratch//2022-AK-MBIE-Rumen-MG/ref/SILVA_128_LSUParc_SSUParc_ribosomal_RNA '
         '-o results/kneaddata && '
         'seqkit stats -j 12 -a results/kneaddata/{wildcards.samples}*.fastq > {output.readStats}'
 
