@@ -228,6 +228,7 @@ rule humann3:
     shell:
         'humann3 ' 
         '--threads {threads} '
+        '--bypass-nucleotide-search '
         '--bypass-nucleotide-index '
         '--search-mode uniref50 '
         '--nucleotide-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50 '
