@@ -182,7 +182,7 @@ rule kraken2GTDB:
         '--report-minimizer-data '
         '{input.KDRs} > {output.k2OutputGTDB}'
 
-
+"""
 rule bracken:
     # compute abundance 
     input:
@@ -235,3 +235,4 @@ rule humann3:
         '--input {input.KDRs} '
         # '--output-basename 979467.test '
         '--o-log {log} '
+"""
