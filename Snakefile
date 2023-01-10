@@ -36,7 +36,8 @@ rule all:
         # expand('results/bracken/{samples}.bracken', samples = SAMPLES),
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
-        'results/ReadsMultiQCReportKneadData.html'
+        'results/ReadsMultiQCReportKneadData.html',
+        expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES)
         
 
 rule merge:
@@ -182,7 +183,7 @@ rule kraken2GTDB:
         '--report-minimizer-data '
         '{input.KDRs} > {output.k2OutputGTDB}'
 
-"""
+
 rule bracken:
     # compute abundance 
     input:
@@ -219,20 +220,21 @@ rule humann3:
         'logs/humann3/{samples}.humann3.log'
     conda:
         'envs/humann3.yaml'
-    # threads: 8
+    threads: 10
     # resources:
     #    mem_gb=24
     message:
         'humann3 profiling: {wildcards.samples}\n'
     shell:
         'humann3 ' 
+        '--threads {threads} '
         '--bypass-nucleotide-index '
-        '--search-mode uniref90 '
-        '--nucleotide-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref90 '
-        '--protein-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref90/protein_database '
+        '--search-mode uniref50 '
+        '--nucleotide-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50 '
+        '--protein-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50/protein_database '
         '--input-format fastq '
         '--output results/humann3 '
         '--input {input.KDRs} '
-        # '--output-basename 979467.test '
+        '--output-basename {samples} '
         '--o-log {log} '
-"""
+
