@@ -209,3 +209,29 @@ rule bracken:
 
 rule humann3:
     # functional profiling
+    input:
+        KDRs = rules.kneaddata.output.clnReads
+    output:
+        geneFamilies = 'results/humann3/{samples}_genefamilies.tsv',
+        pathwaysCoverage = 'results/humann3/{samples}_pathcoverage.tsv',
+        pathways = 'results/humann3/{samples}_pathabundance.tsv'
+    log:
+        'logs/humann3/{samples}.humann3.log'
+    conda:
+        'envs/humann3.yaml'
+    # threads: 8
+    # resources:
+    #    mem_gb=24
+    message:
+        'humann3 profiling: {wildcards.samples}\n'
+    shell:
+        'humann3 ' 
+        '--bypass-nucleotide-index '
+        '--search-mode uniref90 '
+        '--nucleotide-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref90 '
+        '--protein-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref90/protein_database '
+        '--input-format fastq '
+        '--output results/humann3 '
+        '--input {input.KDRs} '
+        # '--output-basename 979467.test '
+        '--o-log {log} '
