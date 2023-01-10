@@ -37,7 +37,8 @@ rule all:
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
         'results/ReadsMultiQCReportKneadData.html',
-        expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES)
+        expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
+        expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
         
 
 rule merge:
@@ -221,14 +222,11 @@ rule humann3:
     conda:
         'envs/humann3.yaml'
     threads: 10
-    # resources:
-    #    mem_gb=24
     message:
         'humann3 profiling: {wildcards.samples}\n'
     shell:
         'humann3 ' 
         '--threads {threads} '
-        '--bypass-nucleotide-search '
         '--bypass-nucleotide-index '
         '--search-mode uniref50 '
         '--nucleotide-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50 '
@@ -239,3 +237,29 @@ rule humann3:
         '--output-basename {samples} '
         '--o-log {log} '
 
+rule humann3protein:
+    # functional profiling
+    input:
+        KDRs = rules.kneaddata.output.clnReads
+    output:
+        geneFamilies = 'results/humann3protein/{samples}_genefamilies.tsv',
+        pathwaysCoverage = 'results/humann3protein/{samples}_pathcoverage.tsv',
+        pathways = 'results/humann3protein/{samples}_pathabundance.tsv'
+    log:
+        'logs/humann3protein/{samples}.humann3.log'
+    conda:
+        'envs/humann3.yaml'
+    threads: 10
+    message:
+        'humann3 profiling: {wildcards.samples}\n'
+    shell:
+        'humann3 ' 
+        '--threads {threads} '
+        '--bypass-nucleotide-search '
+        '--search-mode uniref50 '
+        '--protein-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50/protein_database '
+        '--input-format fastq '
+        '--output results/humann3protein '
+        '--input {input.KDRs} '
+        '--output-basename {samples} '
+        '--o-log {log} '
