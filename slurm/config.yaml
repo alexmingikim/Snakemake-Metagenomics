@@ -28,5 +28,4 @@ scheduler: greedy
 use-conda: True
 use-singularity: True
 reason: True
-cluster-cancel: scancel -u kima
 jobs: 12
