@@ -24,7 +24,7 @@ latency-wait: 6000
 keep-going: True
 rerun-incomplete: True
 printshellcmds: True
-scheduler: greedy
+scheduler: ilp
 use-conda: True
 use-singularity: True
 reason: True
