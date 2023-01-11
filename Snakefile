@@ -173,7 +173,7 @@ rule kraken2GTDB:
         'envs/kraken2.yaml'
     threads: 20
     resources: 
-        mem_gb=360,
+        mem_gb=400,
         partition="inv-bigmem-fast"
     shell:
         'kraken2 '
