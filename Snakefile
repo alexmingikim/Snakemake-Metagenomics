@@ -223,7 +223,7 @@ rule humann3:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb=12,
+        mem_gb=22,
         partition="inv-iranui"
     message:
         'humann3 profiling: {wildcards.samples}\n'
@@ -255,7 +255,7 @@ rule humann3protein:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb=12,
+        mem_gb=22,
         partition="inv-iranui"
     message:
         'humann3 profiling: {wildcards.samples}\n'
