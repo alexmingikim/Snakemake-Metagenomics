@@ -223,8 +223,9 @@ rule humann3:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb=22,
-        partition="inv-iranui"
+        mem_gb= lambda wildcards.samples, attempt: attempt * 12,
+        partition="inv-iranui",
+        time="96:00:00"
     message:
         'humann3 profiling: {wildcards.samples}\n'
     shell:
@@ -255,8 +256,9 @@ rule humann3protein:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb=22,
+        mem_gb= lambda wildcards.samples, attempt: attempt * 12,
         partition="inv-iranui"
+        time="96:00:00"
     message:
         'humann3 profiling: {wildcards.samples}\n'
     shell:
