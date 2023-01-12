@@ -62,7 +62,7 @@ rule humann3Uniref50EC:
         '--input-format fastq '
         '--output results/humann3Uniref50EC '
         '--input {input.KDRs} '
-        '--output-basename {samples} '
+        '--output-basename {wildcards.samples} '
         '--o-log {log}'
 
 rule humann3Uniref50Full:
@@ -93,7 +93,7 @@ rule humann3Uniref50Full:
         '--input-format fastq '
         '--output results/humann3Uniref50Full '
         '--input {input.KDRs} '
-        '--output-basename {samples} '
+        '--output-basename {wildcards.samples} '
         '--o-log {log}'
 
 
@@ -125,5 +125,5 @@ rule humann3Uniref90EC:
         '--input-format fastq '
         '--output results/humann3Uniref90EC '
         '--input {input.KDRs} '
-        '--output-basename {samples} '
+        '--output-basename {wildcards.samples} '
         '--o-log {log}'
