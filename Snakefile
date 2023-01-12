@@ -17,7 +17,7 @@ onstart:
     print(f"Env TMPDIR={os.environ.get('TMPDIR', '<n/a>')}")
 
 # define samples from data directory using wildcards
-SAMPLES, = glob_wildcards('benchmarking/KDRs/{samples}_kneaddata.fastq') 
+SAMPLES, = glob_wildcards('KDRs/{samples}_kneaddata.fastq') 
 
 
 # sanity check
