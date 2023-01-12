@@ -29,25 +29,25 @@ print("")
 
 rule all:
     input: 
-        expand('benchmarking/results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
-        expand('benchmarking/results/humann3Uniref50Full/{samples}_genefamilies.tsv', samples = SAMPLES),
-        expand('benchmarking/results/humann3Uniref90EC/{samples}_genefamilies.tsv', samples = SAMPLES)
+        expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
+        expand('results/humann3Uniref50Full/{samples}_genefamilies.tsv', samples = SAMPLES),
+        expand('results/humann3Uniref90EC/{samples}_genefamilies.tsv', samples = SAMPLES)
 
 
 rule humann3Uniref50EC:
     input:
-        KDRs = 'benchmarking/KDRs/{samples}_kneaddata.fastq'
+        KDRs = 'KDRs/{samples}_kneaddata.fastq'
     output:
-        geneFamilies = 'benchmarking/results/humann3Uniref50EC/{samples}_genefamilies.tsv',
-        pathwaysCoverage = 'benchmarking/results/humann3Uniref50EC/{samples}_pathcoverage.tsv',
-        pathways = 'benchmarking/results/humann3Uniref50EC/{samples}_pathabundance.tsv'
+        geneFamilies = 'results/humann3Uniref50EC/{samples}_genefamilies.tsv',
+        pathwaysCoverage = 'results/humann3Uniref50EC/{samples}_pathcoverage.tsv',
+        pathways = 'results/humann3Uniref50EC/{samples}_pathabundance.tsv'
     log:
-        'benchmarking/logs/humann3Uniref50EC/{samples}.humann3.log'
+        'logs/humann3Uniref50EC/{samples}.humann3.log'
     conda:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb= lambda wildcards.samples, attempt: attempt * 12,
+        mem_gb= lambda wildcards, attempt: attempt * 12,
         partition="inv-iranui",
         time="96:00:00"
     message:
@@ -58,27 +58,27 @@ rule humann3Uniref50EC:
         '--threads {threads} '
         '--bypass-nucleotide-search '
         '--search-mode uniref50 '
-        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/uniref/uniref50_201901b_ec_filtered.dmnd '
+        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/unirefECFilt '
         '--input-format fastq '
-        '--output benchmarking/results/humann3Uniref50EC '
+        '--output results/humann3Uniref50EC '
         '--input {input.KDRs} '
-        '--output-basename {wildcards.samples} '
+        '--output-basename {samples} '
         '--o-log {log}'
 
 rule humann3Uniref50Full:
     input:
-        KDRs = 'benchmarking/KDRs/{samples}_kneaddata.fastq'
+        KDRs = 'KDRs/{samples}_kneaddata.fastq'
     output:
-        geneFamilies = 'benchmarking/results/humann3Uniref50Full/{samples}_genefamilies.tsv',
-        pathwaysCoverage = 'benchmarking/results/humann3Uniref50Full/{samples}_pathcoverage.tsv',
-        pathways = 'benchmarking/results/humann3Uniref50Full/{samples}_pathabundance.tsv'
+        geneFamilies = 'results/humann3Uniref50Full/{samples}_genefamilies.tsv',
+        pathwaysCoverage = 'results/humann3Uniref50Full/{samples}_pathcoverage.tsv',
+        pathways = 'results/humann3Uniref50Full/{samples}_pathabundance.tsv'
     log:
-        'benchmarking/logs/humann3Uniref50Full/{samples}.humann3.log'
+        'logs/humann3Uniref50Full/{samples}.humann3.log'
     conda:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb= lambda wildcards.samples, attempt: attempt * 12,
+        mem_gb= lambda wildcards, attempt: attempt * 12,
         partition="inv-iranui",
         time="96:00:00"
     message:
@@ -89,28 +89,28 @@ rule humann3Uniref50Full:
         '--threads {threads} '
         '--bypass-nucleotide-search '
         '--search-mode uniref50 '
-        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/uniref/uniref50_201901b_full.dmnd '
+        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/uniref '
         '--input-format fastq '
-        '--output benchmarking/results/humann3Uniref50Full '
+        '--output results/humann3Uniref50Full '
         '--input {input.KDRs} '
-        '--output-basename {wildcards.samples} '
+        '--output-basename {samples} '
         '--o-log {log}'
 
 
 rule humann3Uniref90EC:
     input:
-        KDRs = 'benchmarking/KDRs/{samples}_kneaddata.fastq'
+        KDRs = 'KDRs/{samples}_kneaddata.fastq'
     output:
-        geneFamilies = 'benchmarking/results/humann3Uniref90EC/{samples}_genefamilies.tsv',
-        pathwaysCoverage = 'benchmarking/results/humann3Uniref90EC/{samples}_pathcoverage.tsv',
-        pathways = 'benchmarking/results/humann3Uniref90EC/{samples}_pathabundance.tsv'
+        geneFamilies = 'results/humann3Uniref90EC/{samples}_genefamilies.tsv',
+        pathwaysCoverage = 'results/humann3Uniref90EC/{samples}_pathcoverage.tsv',
+        pathways = 'results/humann3Uniref90EC/{samples}_pathabundance.tsv'
     log:
-        'benchmarking/logs/humann3Uniref90EC/{samples}.humann3.log'
+        'logs/humann3Uniref90EC/{samples}.humann3.log'
     conda:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb= lambda wildcards.samples, attempt: attempt * 12,
+        mem_gb= lambda wildcards, attempt: attempt * 12,
         partition="inv-iranui",
         time="96:00:00"
     message:
@@ -121,9 +121,9 @@ rule humann3Uniref90EC:
         '--threads {threads} '
         '--bypass-nucleotide-search '
         '--search-mode uniref90 '
-        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/uniref/uniref90_201901b_ec_filtered.dmnd '
+        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/unirefECFilt '
         '--input-format fastq '
-        '--output benchmarking/results/humann3Uniref90EC '
+        '--output results/humann3Uniref90EC '
         '--input {input.KDRs} '
-        '--output-basename {wildcards.samples} '
+        '--output-basename {samples} '
         '--o-log {log}'
