@@ -223,7 +223,7 @@ rule humann3:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb= lambda wildcards.samples, attempt: attempt * 12,
+        mem_gb= lambda wildcards, attempt: attempt * 12,
         partition="inv-iranui",
         time="96:00:00"
     message:
@@ -243,7 +243,6 @@ rule humann3:
         '--o-log {log}'
 
 rule humann3protein:
-    # functional profiling
     input:
         KDRs = rules.kneaddata.output.clnReads
     output:
@@ -256,7 +255,7 @@ rule humann3protein:
         'envs/humann3.yaml'
     threads: 10
     resources: 
-        mem_gb= lambda wildcards.samples, attempt: attempt * 12,
+        mem_gb= lambda wildcards, attempt: attempt * 12,
         partition="inv-iranui"
         time="96:00:00"
     message:
