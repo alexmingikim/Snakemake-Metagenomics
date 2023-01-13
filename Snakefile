@@ -173,7 +173,8 @@ rule kraken2GTDB:
         'envs/kraken2.yaml'
     threads: 20
     resources: 
-        mem_gb=400,
+        # dynamic memory allocation: start with 400G and increment by 20G with every failed attempt 
+        mem_gb=lambda wildcards, attempt: 400 + ((attempt - 1) * 20),
         partition="inv-bigmem-fast"
     shell:
         'kraken2 '
