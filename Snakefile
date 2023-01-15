@@ -30,15 +30,16 @@ print("")
 
 rule all:
     input: 
-        # kraken2 report 
-        expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
-        # bracken outputs
-        # expand('results/bracken/{samples}.bracken', samples = SAMPLES),
         # multiqc reports (raw data and knead data)
         'results/ReadsMultiQCReportRawData.html',
         'results/ReadsMultiQCReportKneadData.html',
-        expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
-        expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
+        # kraken2 report 
+        expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
+        # bracken outputs
+        expand('results/bracken/{samples}.bracken', samples = SAMPLES)
+        # humann3 ouputs 
+        # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
+        # expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
         
 
 rule merge:
@@ -210,6 +211,7 @@ rule bracken:
         '-t 10' # remove low abundance species (noise)  
 
 
+"""
 rule humann3:
     # functional profiling
     input:
@@ -273,3 +275,4 @@ rule humann3protein:
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
         '--o-log {log}'
+"""
