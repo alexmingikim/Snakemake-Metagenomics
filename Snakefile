@@ -36,7 +36,7 @@ rule all:
         # kraken2 report 
         expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
         # bracken outputs
-        expand('results/bracken/{samples}.bracken', samples = SAMPLES)
+        expand('results/bracken/{samples}.breport', samples = SAMPLES)
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         # expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
