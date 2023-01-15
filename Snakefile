@@ -212,6 +212,22 @@ rule bracken:
 
 
 """
+rule brackenMerge: 
+    # merge all bracken outputs 
+    input: 
+        bReports = 'results/bracken/{samples}.breport'
+    output:
+        mergedReport = 'results/mergedBracken/bracken_all.report'
+    conda: 
+
+    shell:
+        'python '
+        'combine_bracken_outputs.py '
+        '{input.bReports} > {output.mergedReport}'
+"""
+
+
+"""
 rule humann3:
     # functional profiling
     input:
