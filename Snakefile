@@ -36,10 +36,10 @@ rule all:
         # kraken2 report 
         expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
         # bracken outputs
-        # expand('results/bracken/{samples}.breport', samples = SAMPLES),
+        expand('results/bracken/{samples}.breport', samples = SAMPLES)
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
-        expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
+        # expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
         
 
 rule merge:
@@ -186,7 +186,7 @@ rule kraken2GTDB:
         '--report-minimizer-data '
         '{input.KDRs} > {output.k2OutputGTDB}'
 
-"""
+
 rule bracken:
     # compute abundance 
     input:
@@ -211,7 +211,7 @@ rule bracken:
         '&> {log} '
 
 
-
+"""
 rule brackenMerge: 
     # merge all bracken outputs 
     input: 
@@ -225,7 +225,7 @@ rule brackenMerge:
         '{input.bReports} > {output.mergedReport}'
 """
 
-
+"""
 rule humann3:
     # functional profiling
     input:
@@ -288,4 +288,4 @@ rule humann3protein:
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
         '--o-log {log}'
-
+"""
