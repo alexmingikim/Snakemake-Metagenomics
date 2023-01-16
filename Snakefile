@@ -38,7 +38,7 @@ rule all:
         # bracken outputs
         expand('results/bracken/{samples}.breport', samples = SAMPLES),
         # humann3 ouputs 
-        expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
+        # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
         
 
