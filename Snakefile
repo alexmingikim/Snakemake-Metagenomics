@@ -186,7 +186,7 @@ rule kraken2GTDB:
         '--report-minimizer-data '
         '{input.KDRs} > {output.k2OutputGTDB}'
 
-
+"""
 rule bracken:
     # compute abundance 
     input:
@@ -198,36 +198,34 @@ rule bracken:
         'logs/bracken/{samples}.bracken.log'
     conda:
         'envs/bracken.yaml'
-    threads: 8
+    threads: 1
     shell: 
         'bracken '
-        '--log {log} '
         '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
         '-i {input.k2ReportGTDB} '
         '-o {output.bOutput} '
         '-w {output.bReport} '
         '-r 240 ' # average read length
         '-l S '  # species
-        '-t 10' # remove low abundance species (noise)  
+        '-t 10 ' # remove low abundance species (noise)  
+        '&> {log} '
 
 
-"""
+
 rule brackenMerge: 
     # merge all bracken outputs 
     input: 
-        bReports = 'results/bracken/{samples}.breport'
+        bReports = expand('results/bracken/{samples}.breport', samples = SAMPLES)
     output:
         mergedReport = 'results/mergedBracken/bracken_all.report'
     conda: 
-
+        'envs/bracken.yaml'
     shell:
-        'python '
         'combine_bracken_outputs.py '
         '{input.bReports} > {output.mergedReport}'
 """
 
 
-"""
 rule humann3:
     # functional profiling
     input:
@@ -240,10 +238,9 @@ rule humann3:
         'logs/humann3/{samples}.humann3.log'
     conda:
         'envs/humann3.yaml'
-    threads: 10
+    threads: 18
     resources: 
         mem_gb= lambda wildcards, attempt: attempt * 12,
-        partition="inv-iranui",
         time="96:00:00"
     message:
         'humann3 profiling: {wildcards.samples}\n'
@@ -254,12 +251,13 @@ rule humann3:
         '--bypass-nucleotide-index '
         '--search-mode uniref50 '
         '--nucleotide-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50 '
-        '--protein-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50/protein_database '
+        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/uniref50ECFilt '
         '--input-format fastq '
         '--output results/humann3 '
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
         '--o-log {log}'
+
 
 rule humann3protein:
     input:
@@ -272,10 +270,9 @@ rule humann3protein:
         'logs/humann3protein/{samples}.humann3.log'
     conda:
         'envs/humann3.yaml'
-    threads: 10
+    threads: 18
     resources: 
         mem_gb= lambda wildcards, attempt: attempt * 12,
-        partition="inv-iranui"
         time="96:00:00"
     message:
         'humann3 profiling: {wildcards.samples}\n'
@@ -285,10 +282,10 @@ rule humann3protein:
         '--threads {threads} '
         '--bypass-nucleotide-search '
         '--search-mode uniref50 '
-        '--protein-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50/protein_database '
+        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/uniref50ECFilt '
         '--input-format fastq '
         '--output results/humann3protein '
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
         '--o-log {log}'
-"""
+
