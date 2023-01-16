@@ -36,7 +36,9 @@ rule all:
         # kraken2 report 
         expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
         # bracken outputs
-        expand('results/bracken/{samples}.breport', samples = SAMPLES)
+        expand('results/bracken/{samples}.breport', samples = SAMPLES),
+        # merged bracken report 
+        'results/mergedBracken/bracken_all.report'
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         # expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
@@ -211,7 +213,7 @@ rule bracken:
         '&> {log} '
 
 
-"""
+
 rule brackenMerge: 
     # merge all bracken outputs 
     input: 
@@ -223,7 +225,7 @@ rule brackenMerge:
     shell:
         'combine_bracken_outputs.py '
         '{input.bReports} > {output.mergedReport}'
-"""
+
 
 """
 rule humann3:
