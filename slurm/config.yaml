@@ -28,4 +28,4 @@ scheduler: ilp
 use-conda: True
 use-singularity: True
 reason: True
-jobs: 12
+jobs: 24
