@@ -35,10 +35,8 @@ rule all:
         'results/ReadsMultiQCReportKneadData.html',
         # kraken2 report 
         expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
-        # bracken outputs
-        # expand('results/bracken/{samples}.breport', samples = SAMPLES),
         # merged bracken report 
-        # 'results/mergedBracken/bracken_all.report'
+        'results/mergedBracken/bracken_all.report',
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
@@ -189,7 +187,6 @@ rule kraken2GTDB:
         '{input.KDRs} > {output.k2OutputGTDB}'
 
 
-"""
 rule bracken:
     # compute abundance 
     input:
@@ -216,16 +213,12 @@ rule bracken:
 
 rule brackenMerge: 
     # merge all bracken outputs 
-    input: 
-        bReports = expand('results/bracken/{samples}.breport', samples = SAMPLES)
-    output:
-        mergedReport = 'results/mergedBracken/bracken_all.report'
     conda: 
         'envs/bracken.yaml'
     shell:
         'combine_bracken_outputs.py '
-        '{input.bReports} > {output.mergedReport}'
-"""
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/dev/Snakemake-Metagenomics/results/bracken/*.bracken '
+        '-o results/mergedBracken/bracken_all.report'
 
 
 rule humann3:
