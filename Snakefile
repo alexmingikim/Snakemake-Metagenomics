@@ -213,6 +213,10 @@ rule bracken:
 
 rule brackenMerge: 
     # merge all bracken outputs 
+    input: 
+        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/dev/Snakemake-Metagenomics/results/bracken/*.bracken'
+    output:
+        'results/mergedBracken/bracken_all.report'
     conda: 
         'envs/bracken.yaml'
     shell:
