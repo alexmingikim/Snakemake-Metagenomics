@@ -189,6 +189,7 @@ rule kraken2GTDB:
         '{input.KDRs} > {output.k2OutputGTDB}'
 
 
+"""
 rule bracken:
     # compute abundance 
     input:
@@ -213,7 +214,6 @@ rule bracken:
         '&> {log} '
 
 
-
 rule brackenMerge: 
     # merge all bracken outputs 
     input: 
@@ -225,9 +225,9 @@ rule brackenMerge:
     shell:
         'combine_bracken_outputs.py '
         '{input.bReports} > {output.mergedReport}'
-
-
 """
+
+
 rule humann3:
     # functional profiling
     input:
@@ -290,4 +290,3 @@ rule humann3protein:
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
         '--o-log {log}'
-"""
