@@ -224,7 +224,7 @@ rule brackenMerge:
         '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/dev/Snakemake-Metagenomics/results/bracken/*.bracken '
         '-o results/brackenMerge/bracken_all.report'
 
-
+"""
 rule humann3:
     # functional profiling
     input:
@@ -256,9 +256,10 @@ rule humann3:
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
         '--o-log {log}'
+"""
 
 
-rule humann3protein:
+rule humann3Uniref50EC:
     input:
         KDRs = rules.kneaddata.output.clnReads
     output:
