@@ -36,7 +36,7 @@ rule all:
         # kraken2 report 
         expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
         # bracken reports 
-        expand('results/brackenSpecies/{samples}.breport', samples = SAMPLES)
+        expand('results/brackenSpecies/{samples}.breport', samples = SAMPLES),
         expand('results/brackenGenus/{samples}.breport', samples = SAMPLES),
         # merged bracken reports (species, genus) 
         'results/brackenMerge/bracken_species.report',
