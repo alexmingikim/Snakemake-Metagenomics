@@ -203,10 +203,6 @@ rule brackenSpecies:
     conda:
         'envs/bracken.yaml'
     threads: 1
-    onsuccess:
-        'combine_bracken_outputs.py '
-        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/*.bracken '
-        '-o results/brackenMerge/bracken_species.report'
     shell: 
         'bracken '
         '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
@@ -231,10 +227,6 @@ rule brackenGenus:
     conda:
         'envs/bracken.yaml'
     threads: 1
-    onsuccess:
-        'combine_bracken_outputs.py '
-        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/*.bracken '
-        '-o results/brackenMerge/bracken_genus.report'
     shell: 
         'bracken '
         '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
@@ -247,6 +239,29 @@ rule brackenGenus:
         '&> {log} '
 
 
+onsuccess:
+    conda:
+        'envs/bracken.yaml'
+    shell:
+        'combine_bracken_outputs.py '
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/*.bracken '
+        '-o results/brackenMerge/bracken_species.report '
+        'combine_bracken_outputs.py '
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/*.bracken '
+        '-o results/brackenMerge/bracken_genus.report '
+
+onerror:
+    conda:
+        'envs/bracken.yaml'
+    shell:
+        'combine_bracken_outputs.py '
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/*.bracken '
+        '-o results/brackenMerge/bracken_species.report '
+        'combine_bracken_outputs.py '
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/*.bracken '
+        '-o results/brackenMerge/bracken_genus.report '
+
+        
 """
 rule humann3:
     # functional profiling
