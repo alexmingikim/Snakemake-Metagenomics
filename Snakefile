@@ -263,11 +263,11 @@ rule humann3Uniref50EC:
     input:
         KDRs = rules.kneaddata.output.clnReads
     output:
-        geneFamilies = 'results/humann3protein/{samples}_genefamilies.tsv',
-        pathwaysCoverage = 'results/humann3protein/{samples}_pathcoverage.tsv',
-        pathways = 'results/humann3protein/{samples}_pathabundance.tsv'
+        geneFamilies = 'results/humann3Uniref50EC/{samples}_genefamilies.tsv',
+        pathwaysCoverage = 'results/humann3Uniref50EC/{samples}_pathcoverage.tsv',
+        pathways = 'results/humann3Uniref50EC/{samples}_pathabundance.tsv'
     log:
-        'logs/humann3protein/{samples}.humann3.log'
+        'logs/humann3Uniref50EC/{samples}.humann3.log'
     conda:
         'envs/humann3.yaml'
     threads: 18
