@@ -214,14 +214,14 @@ rule bracken:
 rule brackenMerge: 
     # merge all bracken outputs 
     input: 
-        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/dev/Snakemake-Metagenomics/results/bracken/'
+        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/bracken/'
     output:
         'results/brackenMerge/bracken_all.report'
     conda: 
         'envs/bracken.yaml'
     shell:
         'combine_bracken_outputs.py '
-        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/dev/Snakemake-Metagenomics/results/bracken/*.bracken '
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/bracken/*.bracken '
         '-o results/brackenMerge/bracken_all.report'
 
 """
