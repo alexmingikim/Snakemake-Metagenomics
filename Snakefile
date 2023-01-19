@@ -40,7 +40,7 @@ rule all:
         'results/brackenMerge/bracken_genus.report'
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
-        # expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
+        # expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES)
         
 
 rule merge:
