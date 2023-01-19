@@ -35,8 +35,9 @@ rule all:
         'results/ReadsMultiQCReportKneadData.html',
         # kraken2 report 
         expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
-        # merged bracken report 
-        'results/brackenMerge/bracken_all.report'
+        # merged bracken reports (species, genus) 
+        'results/brackenMerge/bracken_species.report',
+        'results/brackenMerge/bracken_genus.report'
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         # expand('results/humann3protein/{samples}_genefamilies.tsv', samples = SAMPLES)
@@ -187,15 +188,15 @@ rule kraken2GTDB:
         '{input.KDRs} > {output.k2OutputGTDB}'
 
 
-rule bracken:
+rule brackenSpecies:
     # compute abundance 
     input:
         k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.k2report'
     output:
-        bOutput = 'results/bracken/{samples}.bracken',
-        bReport = 'results/bracken/{samples}.breport'
+        bOutput = 'results/brackenSpecies/{samples}.bracken',
+        bReport = 'results/brackenSpecies/{samples}.breport'
     log:
-        'logs/bracken/{samples}.bracken.log'
+        'logs/brackenSpecies/{samples}.bracken.log'
     conda:
         'envs/bracken.yaml'
     threads: 1
@@ -206,23 +207,62 @@ rule bracken:
         '-o {output.bOutput} '
         '-w {output.bReport} '
         '-r 240 ' # average read length
-        '-l S '  # species
+        '-l S '  # SPECIES
         '-t 10 ' # remove low abundance species (noise)  
         '&> {log} '
 
 
-rule brackenMerge: 
+rule brackenGenus:
+    # compute abundance 
+    input:
+        k2ReportGTDB = 'results/kraken2GTDB/{samples}.GTDB.k2report'
+    output:
+        bOutput = 'results/brackenGenus/{samples}.bracken',
+        bReport = 'results/brackenGenus/{samples}.breport'
+    log:
+        'logs/brackenGenus/{samples}.bracken.log'
+    conda:
+        'envs/bracken.yaml'
+    threads: 1
+    shell: 
+        'bracken '
+        '-d /dataset/2022-BJP-GTDB/scratch/2022-BJP-GTDB/kraken/GTDB '
+        '-i {input.k2ReportGTDB} '
+        '-o {output.bOutput} '
+        '-w {output.bReport} '
+        '-r 240 ' # average read length
+        '-l G '  # GENUS
+        '-t 10 ' # remove low abundance species (noise)  
+        '&> {log} '
+
+
+rule brackenMergeSpecies: 
     # merge all bracken outputs 
     input: 
-        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/bracken/'
+        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/'
     output:
-        'results/brackenMerge/bracken_all.report'
+        'results/brackenMerge/bracken_species.report'
     conda: 
         'envs/bracken.yaml'
     shell:
         'combine_bracken_outputs.py '
-        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/bracken/*.bracken '
-        '-o results/brackenMerge/bracken_all.report'
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/*.bracken '
+        '-o results/brackenMerge/bracken_species.report'
+
+
+rule brackenMergeGenus: 
+    # merge all bracken outputs 
+    input: 
+        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/'
+    output:
+        'results/brackenMerge/bracken_genus.report'
+    conda: 
+        'envs/bracken.yaml'
+    shell:
+        'combine_bracken_outputs.py '
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/*.bracken '
+        '-o results/brackenMerge/bracken_genus.report'
+
 
 """
 rule humann3:
