@@ -213,6 +213,10 @@ rule brackenSpecies:
         '-l S '  # SPECIES
         '-t 10 ' # remove low abundance species (noise)  
         '&> {log} '
+    onsuccess:
+        'combine_bracken_outputs.py '
+        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/*.bracken '
+        '-o results/brackenMerge/bracken_species.report'
 
 
 rule brackenGenus:
@@ -237,31 +241,7 @@ rule brackenGenus:
         '-l G '  # GENUS
         '-t 10 ' # remove low abundance species (noise)  
         '&> {log} '
-
-
-rule brackenMergeSpecies: 
-    # merge all bracken outputs 
-    input: 
-        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/'
-    output:
-        'results/brackenMerge/bracken_species.report'
-    conda: 
-        'envs/bracken.yaml'
-    shell:
-        'combine_bracken_outputs.py '
-        '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/*.bracken '
-        '-o results/brackenMerge/bracken_species.report'
-
-
-rule brackenMergeGenus: 
-    # merge all bracken outputs 
-    input: 
-        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/'
-    output:
-        'results/brackenMerge/bracken_genus.report'
-    conda: 
-        'envs/bracken.yaml'
-    shell:
+    onsuccess:
         'combine_bracken_outputs.py '
         '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/*.bracken '
         '-o results/brackenMerge/bracken_genus.report'
