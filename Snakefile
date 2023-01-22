@@ -40,7 +40,7 @@ rule all:
         expand('results/brackenGenus/{samples}.breport', samples = SAMPLES),
         # merged bracken reports (species, genus) 
         'results/countMatrices/bracken_species.report',
-        'results/countMatrices/bracken_genus.report'
+        'results/countMatrices/bracken_genus.report',
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
