@@ -39,11 +39,14 @@ rule all:
         expand('results/brackenSpecies/{samples}.breport', samples = SAMPLES),
         expand('results/brackenGenus/{samples}.breport', samples = SAMPLES),
         # merged bracken reports (species, genus) 
-        'results/brackenMerge/bracken_species.report',
-        'results/brackenMerge/bracken_genus.report'
+        'results/countMatrices/bracken_species.report',
+        'results/countMatrices/bracken_genus.report'
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
-        # expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES)
+        expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
+        # humann3 join tables 
+        'results/countMatrices/humann3_gene_families.tsv',
+        'results/countMatrices/humann3_pathway_abundance.tsv'
         
 
 rule merge:
@@ -251,7 +254,7 @@ rule brackenMergeSpecies:
     shell:
         'combine_bracken_outputs.py '
         '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/*.bracken '
-        '-o results/brackenMerge/bracken_species.report'
+        '-o results/countMatrices/bracken_species.report'
 
 
 rule brackenMergeGenus: 
@@ -265,7 +268,7 @@ rule brackenMergeGenus:
     shell:
         'combine_bracken_outputs.py '
         '--files /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/*.bracken '
-        '-o results/brackenMerge/bracken_genus.report'
+        '-o results/countMatrices/bracken_genus.report'
 
 
 """
@@ -332,3 +335,32 @@ rule humann3Uniref50EC:
         '--input {input.KDRs} '
         '--output-basename {wildcards.samples} '
         '--o-log {log}'
+
+
+rule humann3JoinGeneFamilies:
+    input:
+        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/humann3Uniref50EC'
+    output:
+        'results/countMatrices/humann3_gene_families.tsv'
+    conda: 
+        'envs/humann3.yaml'
+    shell:
+        'humann_join_tables '
+        '-i /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/humann3Uniref50EC '
+        '--file_name genefamilies.tsv '
+        '-o results/countMatrices/humann3_gene_families.tsv'
+
+
+rule humann3JoinPathwayAbundance:
+    input:
+        '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/humann3Uniref50EC'
+    output:
+        'results/countMatrices/humann3_pathway_abundance.tsv'
+    conda: 
+        'envs/humann3.yaml'
+    shell:
+        'humann_join_tables '
+        '-i /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/humann3Uniref50EC '
+        '--file_name pathabundance.tsv '
+        '-o results/countMatrices/humann3_path_abundance.tsv'
+    
