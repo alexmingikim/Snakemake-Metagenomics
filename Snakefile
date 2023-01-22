@@ -165,7 +165,7 @@ rule multiQCKDRs:
         '-s '
         '-f '
         '--interactive '
-        '{input.fastqc}'
+        'results/fastqcKDR/*_fastqc.zip'
 
 
 rule kraken2GTDB:
