@@ -46,7 +46,7 @@ rule all:
         expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
         # humann3 join tables 
         'results/countMatrices/humann3_gene_families.tsv',
-        'results/countMatrices/humann3_pathway_abundance.tsv'
+        'results/countMatrices/humann3_path_abundance.tsv'
         
 
 rule merge:
@@ -355,7 +355,7 @@ rule humann3JoinPathwayAbundance:
     input:
         '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/humann3Uniref50EC'
     output:
-        'results/countMatrices/humann3_pathway_abundance.tsv'
+        'results/countMatrices/humann3_path_abundance.tsv'
     conda: 
         'envs/humann3.yaml'
     shell:
