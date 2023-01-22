@@ -154,7 +154,7 @@ rule fastqcKDR:
 
 rule multiQCKDRs: 
     input: 
-        fastqc = 'results/fastqcKDR/*_fastqc.zip'
+        fastqc = 'results/fastqcKDR/'
     output: 
         'results/ReadsMultiQCReportKneadData.html'
     conda: 
@@ -165,7 +165,7 @@ rule multiQCKDRs:
         '-s '
         '-f '
         '--interactive '
-        'results/fastqcKDR/*_fastqc.zip'
+        '{input.fastqc}'
 
 
 rule kraken2GTDB:
