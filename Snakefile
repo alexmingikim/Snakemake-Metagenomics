@@ -239,6 +239,7 @@ rule brackenGenus:
         '&> {log} '
 
 
+# Note: both brackenMerge rules must be run once all bracken jobs have been completed
 rule brackenMergeSpecies: 
     # merge all bracken outputs 
     input: 
