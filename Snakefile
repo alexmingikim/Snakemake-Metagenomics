@@ -154,7 +154,7 @@ rule fastqcKDR:
 
 rule multiQCKDRs: 
     input: 
-        fastqc = expand('results/fastqcKDR/{samples}_kneaddata_fastqc.zip', samples = SAMPLES)
+        'results/fastqcKDR/*.zip'
     output: 
         'results/ReadsMultiQCReportKneadData.html'
     conda: 
