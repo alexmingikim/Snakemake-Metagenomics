@@ -248,7 +248,7 @@ rule brackenMergeSpecies:
     input: 
         '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenSpecies/'
     output:
-        'results/brackenMerge/bracken_species.report'
+        'results/countMatrices/bracken_species.report'
     conda: 
         'envs/bracken.yaml'
     shell:
@@ -262,7 +262,7 @@ rule brackenMergeGenus:
     input: 
         '/bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/brackenGenus/'
     output:
-        'results/brackenMerge/bracken_genus.report'
+        'results/countMatrices/bracken_genus.report'
     conda: 
         'envs/bracken.yaml'
     shell:
