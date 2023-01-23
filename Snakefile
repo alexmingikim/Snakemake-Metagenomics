@@ -33,22 +33,17 @@ rule all:
         # multiqc reports (raw data and knead data)
         ## 'results/ReadsMultiQCReportRawData.html',
         ## 'results/ReadsMultiQCReportKneadData.html',
-        
         # kraken2 report 
         ## expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
-        
         # bracken reports 
         ## expand('results/brackenSpecies/{samples}.breport', samples = SAMPLES),
         ## expand('results/brackenGenus/{samples}.breport', samples = SAMPLES),
-        
         # merged bracken reports (species, genus) 
         'results/countMatrices/bracken_species.report',
         'results/countMatrices/bracken_genus.report',
-        
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         ## expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
-        
         # humann3 final count matrices  
         'results/countMatrices/humann3_regrouped_EC_renamed.tsv',
         'results/countMatrices/humann3_regrouped_KO_renamed.tsv',
