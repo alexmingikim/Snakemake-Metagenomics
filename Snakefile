@@ -51,6 +51,7 @@ rule all:
         
         # humann3 final count matrices  
         'results/countMatrices/humann3_regrouped_EC_renamed.tsv',
+        'results/countMatrices/humann3_regrouped_KO_renamed.tsv',
         'results/countMatrices/humann3_path_abundance.tsv'
         
 
