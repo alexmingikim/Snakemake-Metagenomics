@@ -31,19 +31,24 @@ print("")
 rule all:
     input: 
         # multiqc reports (raw data and knead data)
-        'results/ReadsMultiQCReportRawData.html',
-        'results/ReadsMultiQCReportKneadData.html',
+        ## 'results/ReadsMultiQCReportRawData.html',
+        ## 'results/ReadsMultiQCReportKneadData.html',
+        
         # kraken2 report 
-        expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
+        ## expand('results/kraken2GTDB/{samples}.GTDB.k2report', samples = SAMPLES),
+        
         # bracken reports 
-        expand('results/brackenSpecies/{samples}.breport', samples = SAMPLES),
-        expand('results/brackenGenus/{samples}.breport', samples = SAMPLES),
+        ## expand('results/brackenSpecies/{samples}.breport', samples = SAMPLES),
+        ## expand('results/brackenGenus/{samples}.breport', samples = SAMPLES),
+        
         # merged bracken reports (species, genus) 
         'results/countMatrices/bracken_species.report',
         'results/countMatrices/bracken_genus.report',
+        
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
-        expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
+        ## expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
+        
         # humann3 final count matrices  
         'results/countMatrices/humann3_regrouped_EC_renamed.tsv',
         'results/countMatrices/humann3_path_abundance.tsv'
@@ -390,4 +395,32 @@ rule humann3RenameGeneFamiliesEC:
         'humann_rename_table '
         '-i {input} '
         '-n ec '
+        '-o {output}'
+
+
+rule humann3RegroupGeneFamiliesKO:
+    input: 
+        'results/countMatrices/humann3_gene_families.tsv'
+    output: 
+        'results/countMatrices/humann3_regrouped_KO.tsv'
+    conda:
+        'envs/humann3.yaml'
+    shell: 
+        'humann_regroup_table '
+        '-i {input} '
+        '-c /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/utility_mapping/map_ko_uniref50.txt.gz '
+        '-o {output}'
+
+
+rule humann3RenameGeneFamiliesEC: 
+    input: 
+        'results/countMatrices/humann3_regrouped_KO.tsv'
+    output: 
+        'results/countMatrices/humann3_regrouped_KO_renamed.tsv'
+    conda: 
+        'envs/humann3.yaml'
+    shell:
+        'humann_rename_table '
+        '-i {input} '
+        '-n kegg-orthology '
         '-o {output}'
