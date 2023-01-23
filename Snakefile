@@ -408,7 +408,7 @@ rule humann3RegroupGeneFamiliesKO:
         '-o {output}'
 
 
-rule humann3RenameGeneFamiliesEC: 
+rule humann3RenameGeneFamiliesKO: 
     input: 
         'results/countMatrices/humann3_regrouped_KO.tsv'
     output: 
