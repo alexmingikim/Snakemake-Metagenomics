@@ -44,8 +44,8 @@ rule all:
         # humann3 ouputs 
         # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
-        # humann3 join tables 
-        'results/countMatrices/humann3_gene_families.tsv',
+        # humann3 final count matrices  
+        'results/countMatrices/humann3_regrouped_EC_renamed.tsv',
         'results/countMatrices/humann3_path_abundance.tsv'
         
 
@@ -363,4 +363,31 @@ rule humann3JoinPathwayAbundance:
         '-i /bifo/scratch/2022-AK-MBIE-Rumen-MG/Snakemake-Metagenomics/results/humann3Uniref50EC '
         '--file_name pathabundance.tsv '
         '-o results/countMatrices/humann3_path_abundance.tsv'
-    
+
+
+rule humann3RegroupGeneFamiliesEC:
+    input: 
+        'results/countMatrices/humann3_gene_families.tsv'
+    output: 
+        'results/countMatrices/humann3_regrouped_EC.tsv'
+    conda:
+        'envs/humann3.yaml'
+    shell: 
+        'humann_regroup_table '
+        '-i {input} '
+        '-c /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/utility_mapping/map_level4ec_uniref50.txt.gz '
+        '-o {output}'
+
+
+rule humann3RenameGeneFamiliesEC: 
+    input: 
+        'results/countMatrices/humann3_regrouped_EC.tsv'
+    output: 
+        'results/countMatrices/humann3_regrouped_EC_renamed.tsv'
+    conda: 
+        'envs/humann3.yaml'
+    shell:
+        'humann_rename_table '
+        '-i {input} '
+        '-n ec '
+        '-o {output}'
