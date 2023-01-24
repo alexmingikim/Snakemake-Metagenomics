@@ -42,7 +42,6 @@ rule all:
         'results/countMatrices/bracken_species.report',
         'results/countMatrices/bracken_genus.report',
         # humann3 ouputs 
-        # expand('results/humann3/{samples}_genefamilies.tsv', samples = SAMPLES),
         expand('results/humann3Uniref50EC/{samples}_genefamilies.tsv', samples = SAMPLES),
         # humann3 final count matrices  
         'results/countMatrices/humann3_regrouped_EC_renamed.tsv',
