@@ -272,41 +272,6 @@ rule brackenMergeGenus:
         '-o results/countMatrices/bracken_genus.report'
 
 
-"""
-rule humann3:
-    # functional profiling
-    input:
-        KDRs = rules.kneaddata.output.clnReads
-    output:
-        geneFamilies = 'results/humann3/{samples}_genefamilies.tsv',
-        pathwaysCoverage = 'results/humann3/{samples}_pathcoverage.tsv',
-        pathways = 'results/humann3/{samples}_pathabundance.tsv'
-    log:
-        'logs/humann3/{samples}.humann3.log'
-    conda:
-        'envs/humann3.yaml'
-    threads: 18
-    resources: 
-        mem_gb= lambda wildcards, attempt: attempt * 12,
-        time="96:00:00"
-    message:
-        'humann3 profiling: {wildcards.samples}\n'
-    shell:
-        'humann3 ' 
-        '--memory-use minimum '
-        '--threads {threads} '
-        '--bypass-nucleotide-index '
-        '--search-mode uniref50 '
-        '--nucleotide-database /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/humann3Struo2/uniref50 '
-        '--protein-database /bifo/scratch/2022-AK-MBIE-Rumen-MG/ref/humann3/unirefECFilt '
-        '--input-format fastq '
-        '--output results/humann3 '
-        '--input {input.KDRs} '
-        '--output-basename {wildcards.samples} '
-        '--o-log {log}'
-"""
-
-
 rule humann3Uniref50EC:
     input:
         KDRs = rules.kneaddata.output.clnReads
