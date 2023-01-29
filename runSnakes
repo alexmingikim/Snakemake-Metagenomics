@@ -9,6 +9,9 @@ echo "Beginning executing on: $(date)"
 
 source activate snakemake 
 
+### Run bracken and humann3 rules prior to a full run - to ensure rules for utility scripts run correctly 
+snakemake --profile slurm -R brackenSpecies brackenGenus humann3Uniref50EC
+
 snakemake --profile slurm
 
 snakemake --report snakemakeReport.html
